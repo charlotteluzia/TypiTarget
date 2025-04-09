@@ -1,0 +1,33 @@
+ffn_add_cat_distractors <- function(available_images, cat_targets, this_block, vars){
+  
+# Add a set of distractor images to an already existing set of target images for
+# the categorization task. We select images as distractor that are as close as
+# possible to the median typicality, because these are least likely to be used
+# as high/low typicality targets.
+  
+  medians <- available_images %>%
+    group_by(category) %>%
+    summarise(median_typicality = median(typicality, na.rm = TRUE))
+  
+  
+  cat_distractors <- available_images %>%
+    filter(category != this_block[[1]]$category) %>%               # Exclude the target category
+    inner_join(medians, by = "category") %>%         # Add the medians to the data
+    group_by(category) %>%
+    slice_min(abs(typicality - median_typicality),   # Select rows closest to the median
+              n = vars$n_distractors_per_block/2, 
+              with_ties = FALSE) %>%
+    ungroup()
+  
+  cat_distractors$cond_cat <- "distractor"
+  cat_distractors$cond_mem <- ""
+  cat_distractors$typi_bin <- "mdn_typical"
+  cat_distractors$block_ptypical <- this_block[[1]]$p_typical
+  
+  # Combine targets and distractors, then randomize order.
+  cat_targets_and_distractors <- bind_rows(cat_targets, cat_distractors)
+  cat_targets_and_distractors <- cat_targets_and_distractors %>% slice(sample(n()))
+  
+  
+  return(cat_targets_and_distractors)
+}

@@ -1,0 +1,26 @@
+{
+    "id": "A58879DD",
+    "path": "C:/Users/User/Desktop/input_files_generation/trial_list_generator/functions/ffn_get_cat_and_mem_targets.R",
+    "project_path": null,
+    "type": "r_source",
+    "hash": "1964751434",
+    "contents": "",
+    "dirty": false,
+    "created": 1744036235487.0,
+    "source_on_save": false,
+    "relative_order": 13,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "3,2",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1734468993,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1734468993,
+    "read_only": false,
+    "read_only_alternatives": []
+}
