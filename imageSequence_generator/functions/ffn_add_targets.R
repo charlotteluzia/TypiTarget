@@ -17,7 +17,7 @@ ffn_add_target_cat <- function(available_images, this_block, vars){
     # Filter rows where category matches current_category
     filter(category == vars$category_target) %>%
     # Take n_target rows
-    slice_head(n = n_target_cat + n_target_mem_novel) %>%
+    slice_head(n = n_target_cat) %>%
     # Randomly shuffle the rows
     slice(sample(n()))    
   
@@ -26,42 +26,21 @@ ffn_add_target_cat <- function(available_images, this_block, vars){
   # ..............................................................................
   # Take a random sample of the typical and untypical images as CATEGORIZATION targets.
   # ..............................................................................
-  cat_target   <- target_imgs   %>% slice(1:n_target_cat)
+  cat_target   <- target_imgs 
   
   
   cat_target$cond_cat <- "target"
   cat_target$cond_mem <- ""
   
   
-  # ..............................................................................
-  # Take the remaining images as novel stimuli for the MEMORY task
-  # ..............................................................................
-  mem_target   <- target_imgs  
-  mem_target$cond_mem <- ""
-
   
-  mem_target <- mem_target %>%
-    mutate(cond_mem = case_when(
-      row_number() %in% 1:n_target_cat ~ "old",    
-      row_number() %in% (n_target_cat + 1):(n_target_cat + n_target_mem_novel) ~ "new",        
-      TRUE ~ cond_mem
-    ))
-
-  
-  mem_target$cond_cat <- ""
-  
-  
-  # ..............................................................................
-  # Shuffle both lists.
-  # ..............................................................................
   cat_target <- cat_target %>% slice(sample(n()))
-  mem_target <- mem_target %>% slice(sample(n()))
-  
+ 
   
   # ..............................................................................
   # Return both lists.
   # ..............................................................................
-  return(list(cat_target = cat_target, mem_target = mem_target))
+  return(cat_target)
   
   
   

@@ -28,8 +28,8 @@ setpaths <- function(vars){
   # dirs$logfiles   <- paste0(dirs$data, "/data_prague/") 
   # dirs$logfiles <- paste0(dirs$data, "/data_combined")
   # dirs$logfiles   <- paste0(dirs$data, "/pilot_data/")
-  dirs$logfiles <- paste0(dirs$data, "/data_SceneCat3_Prague/")
-  # dirs$logfiles <- paste0(dirs$data, "/data_SceneCat3_Muenster/")
+  # dirs$logfiles <- paste0(dirs$data, "/data_SceneCat3_Prague/")
+  dirs$logfiles <- paste0(dirs$data, "/data_SceneCat3_Muenster/")
   # dirs$logfiles <- paste0(dirs$data, "/data_SceneCat3_combined/")
   
   # Function to check existence and print message

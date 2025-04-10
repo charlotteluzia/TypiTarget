@@ -28,7 +28,8 @@ vars$p_novel                 <- 1 # Proportion of new images in the memory block
 vars$n_novel                 <- ceiling(vars$p_novel * vars$n_targets_per_block)
 vars$n_catch_trials          <- 4 # Number of catch trials in each memory block
 
-vars$stim_prop               <- c(0.8)
+vars$stim_prop               <- c(0.6)
+vars$stim_untyp              <- c(0.2)
 vars$target_non_prop         <- c(0.1)
 # vars$un_typ_prop             <- c(0.2, 0.8)
 vars$n_typical               <- vars$stim_prop * vars$n_trials_per_block
