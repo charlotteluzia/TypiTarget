@@ -44,7 +44,7 @@ P.CenterY      = P.myHeight/2;
 
 P.res   = [P.myWidth P.myHeight]; % monitor resolution
 P.sz    = [36 27];                % monitor size in cm
-P.vdist = [55];                   % distance of oberver from monitor
+P.vdist = [55];                   % distance of observer from monitor
 [P.pixperdeg, P.degperpix] = VisAng(P);
 P.pixperdeg = mean(P.pixperdeg);
 P.degperpix = mean(P.degperpix);
@@ -78,9 +78,9 @@ P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
 %% -----------------------------------------------------------------------
 % Parameters of categorization and memory task
 %  -----------------------------------------------------------------------
-P.cat_text = {'[Is this a ?]'};
+P.cat_text = {'[Press j if the image shows a supermarket]'}; % count occurences of supermarkets by pressing button
 P.cat_cues = {'[f]', '[j]'};
-P.cat_responseText = {'[no]', '[yes]'};
+% P.cat_responseText = {'[no]', '[yes]'};
 % P.cat_responseText = {'[nein]', '[ja]'};
 
 % present question above image, cues in lower corners
@@ -91,6 +91,7 @@ P.mem_cues = {'[d]', '[f]', '[j]', '[k]'};
 P.mem_responseText = {'[certainly old]', '[rather old]', '[rather new]', '[certainly new]'};
 % P.mem_responseText = {'[sicher alt]', '[eher alt]', '[eher neu]', '[sicher neu]'};
 
+%P.mem_location
 
 %% -----------------------------------------------------------------------
 % Parameters of the procedure
@@ -99,6 +100,17 @@ P.BreakAfternTrials = 100;
 
 % Timing parameters.
 P.ImageDuration = 0.900;
+P.setISI        = 1.500;
 P.minISI        = 1.000;
 P.maxISI        = 2.000;
+%% -----------------------------------------------------------------------
+% Load table with struct specifications: image name, typicality, category
+%  -----------------------------------------------------------------------
+table_img        = readtable('stimuli_info_140.xlsx');
+table_bedroom    = table_img(strcmp(table_img.category, 'bedrooms'),:);
+table_kitchen    = table_img(strcmp(table_img.category, 'kitchens'),:);
+table_livingroom = table_img(strcmp(table_img.category, 'living rooms'),:);
+%table_target     = readtable('stimuli_info_target.xlsx');
+%table_nontarget  = readtable('stimuli_info_nontarget.xlsx');
+
 

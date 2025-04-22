@@ -1,6 +1,12 @@
 function [Info] = OneTrial(t)
 
 global window Info P DefaultScreen;
+% ----------------------------------------------------------------------
+% Present pause a regular intervals and when a new block starts.
+% ----------------------------------------------------------------------
+if(mod(t, P.BreakAfternTrials) == 1 || t == 1)
+    PresentPause(window, P, Info, t)
+end 
 
 % ----------------------------------------------------------------------
 % Fixation cross and random-length inter-stimulus interval 

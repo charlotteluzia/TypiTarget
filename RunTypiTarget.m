@@ -1,28 +1,22 @@
-function Info = RunCRT(name)
-% Continuous Recognition Test.
-% Use RunCRT('test') for testing. Running "test" multiple times will NOT
-% start new runs each time, it will always start with a first run. All
-% other names will, when run more than once, present only images that have
-% not been used on that name before.
-%
-% flavor: determines what to use the experiment for. Options:
-%   -training: runs CRT with a different set of scenes. No logfile is generated.
-%   -crt: crt paradigm/main experiment
-%   -rectest: delayed recognition test with old and entirely new scenes.
+% Oddball/Three Stimulus + Memory task Paradigm
+% main script for testing 
+% 
 
+sca;
+clear;
+close all;
 
-%  name = 'testb';
-
+% participant number, e.g. 01
+name = '';
 
 %% ---------------------------------------------------------------------
 % Add paths and initialize global variables. and test if logfile exists for this subject.
 % ---------------------------------------------------------------------
 addpath('./Functions');
-% addpath('./TriggerPorts');
+% addpath('./Easy-TTL-trigger-master');
+addpath('./stimuli');
 global Info P
 
-% Reset the seed of the random number generator.
-RandStream('mcg16807','Seed',0); % works with old matlab %rng('shuffle'); %Requires new matlab
 
 %% --------------------------------------------------------------------
 % Initiate file names and load Parameters.
@@ -30,7 +24,16 @@ RandStream('mcg16807','Seed',0); % works with old matlab %rng('shuffle'); %Requi
 [P] = Parameters(P);
 
 Info                   = struct;
+Info.name              = name;
+Info.Logfilename       = ['Logfiles' filesep 'TypT' name '_logfile.mat'];
+Info.DateTime          = {datestr(clock)};
 Info.P                 = P;
+
+%% --------------------------------------------------------------------
+% Define parameters of block number 
+% ---------------------------------------------------------------------
+cat_num_block = 1;
+rep_num = 1;
 
 
 %% ------------------------------------------------------------------------
