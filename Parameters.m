@@ -18,13 +18,13 @@ if strcmpi(P.thismachine, '') % EEG testing room
     P.myWidth       = 1280;
     P.myHeight      = 1024;
     P.myRate        = 100;
-    P.ImagePath     = 'C:\Dokumente und Einstellungen\matlab\Eigene Dateien\Charlotte\TypiBall\stimuli\';  
+    P.ImagePath     = 'C:\Dokumente und Einstellungen\matlab\Eigene Dateien\Charlotte\TypiTarget\stimuli\';  
             
     
 else        
     switch P.thismachine
         case 'DESKTOP-KPH292U'
-            P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\TypiBall\stimuli\';             
+            P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';             
             P.PresentScreen = 2;
             P.myWidth       = 1920;
             P.myHeight      = 1080;
@@ -96,21 +96,35 @@ P.mem_responseText = {'[certainly old]', '[rather old]', '[rather new]', '[certa
 %% -----------------------------------------------------------------------
 % Parameters of the procedure
 %  -----------------------------------------------------------------------
-P.BreakAfternTrials = 100;
+P.nTrials = 100;
 
 % Timing parameters.
 P.ImageDuration = 0.900;
 P.setISI        = 1.500;
 P.minISI        = 1.000;
 P.maxISI        = 2.000;
+
+%% -----------------------------------------------------------------------
+% Images
+%  -----------------------------------------------------------------------
+P.prop_typ = 0.6;  % proportion of typical images of 100 trials
+P.prop_untyp = 0.2;
+P.prop_target = 0.1;
+P.prop_nontarget = 0.1;
+
+
+
 %% -----------------------------------------------------------------------
 % Load table with struct specifications: image name, typicality, category
 %  -----------------------------------------------------------------------
 table_img        = readtable('stimuli_info_140.xlsx');
-table_bedroom    = table_img(strcmp(table_img.category, 'bedrooms'),:);
-table_kitchen    = table_img(strcmp(table_img.category, 'kitchens'),:);
-table_livingroom = table_img(strcmp(table_img.category, 'living rooms'),:);
+images_bedroom    = table_img(strcmp(table_img.category, 'bedrooms'),:);
+images_kitchen    = table_img(strcmp(table_img.category, 'kitchens'),:);
+images_livingroom = table_img(strcmp(table_img.category, 'living rooms'),:);
 %table_target     = readtable('stimuli_info_target.xlsx');
 %table_nontarget  = readtable('stimuli_info_nontarget.xlsx');
+%match = wildcardPattern + '/';
+%table_bedroom.stimulus = erase(table_bedroom.stimulus, match);
+
 
 

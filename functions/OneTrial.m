@@ -29,10 +29,8 @@ Info.T(t).ISI = P.minISI + -log(1-rand.*(1-exp(-P.maxISI./mean_isi))).*mean_isi;
 % ----------------------------------------------------------------------
 % Prepare images
 % ----------------------------------------------------------------------
-%ImageFolder = 'images';
-%imgList = dir(fullfile(P.ImagePath,['*.' imageFormat]));
-%imgList = {imgList(:).name};
-Img = imread(fullfile(P.ImagePath, 'img_pbsj1.png'));
+%Img = imread(fullfile(P.ImagePath, 'img_pbsj1.png'));
+Img = imread(fullfile(P.ImagePath, Info.T(t).filename));
 
 ImgTex     = Screen('MakeTexture', window, Img);    
 %ImgRect    = Screen('Rect', ImgTex); 
@@ -56,5 +54,25 @@ if P.isEEG
 end
 
 Screen('Close', ImgTex); 
+
+% ----------------------------------------------------------------------
+% Evaluate response. 
+% ----------------------------------------------------------------------
+
+% Response time
+Info.T(t).RT = rt_time - tImageOn;
+
+% Oddball task
+%if/while
+% did the subject detect the target?
+if Info.T(t).Report==99
+    isQuit = true;
+
+elseif Info.T(t).Report
+
+
+% Memory task
+% did the subject say "(rather)/old" or "(rather)/new"?
+
 
 end

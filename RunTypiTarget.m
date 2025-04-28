@@ -35,6 +35,18 @@ Info.P                 = P;
 cat_num_block = 1;
 rep_num = 1;
 
+%% --------------------------------------------------------------------
+% Define trials.
+% ---------------------------------------------------------------------
+% T struct for each room category, with info about filename and room
+% category
+
+for itrial = 1:length(Info.T)
+    iImage = ImageIdx(Info.T(itrial).stimulus_idx);
+    Info.T(itrial).filename       = strtrim(AvailImageNames(iImage,:));
+    Info.T(itrial).category_name  = strtrim(AvailImageCategorNames(iImage,:));
+    
+end
 
 %% ------------------------------------------------------------------------
 % Open trigger port.
