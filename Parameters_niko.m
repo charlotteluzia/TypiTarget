@@ -118,7 +118,7 @@ P.n_untyp     = ceil(P.prop_untyp     * P.n_trials_per_block);
 P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
 P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
 
-P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'};
+P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'}; %, 'target', 'nontarget'};
 P.nblocks_per_category = 2;
 
 P.stim_140       = 'stimuli_info_140.xlsx';
@@ -133,8 +133,8 @@ table_img        = readtable('stimuli_info_140.xlsx');
 images_bedroom    = table_img(strcmp(table_img.category, 'bedrooms'),:);
 images_kitchen    = table_img(strcmp(table_img.category, 'kitchens'),:);
 images_livingroom = table_img(strcmp(table_img.category, 'living rooms'),:);
-%table_target     = readtable('stimuli_info_target.xlsx');
-%table_nontarget  = readtable('stimuli_info_nontarget.xlsx');
+table_target     = readtable('stimuli_info_target.xlsx');
+table_nontarget  = readtable('stimuli_info_nontarget.xlsx');
 %match = wildcardPattern + '/';
 %table_bedroom.stimulus = erase(table_bedroom.stimulus, match);
 

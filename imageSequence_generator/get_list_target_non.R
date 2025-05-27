@@ -13,7 +13,7 @@ library(readxl)
 library(data.table)
 library(writexl) # We use this package for writing for compatibility
 # The correct write functions should use an underscore in write_xlsx.
-
+library(purrr)
 
 # -----------------------------------------------------------------------------
 # Set the directories.
@@ -62,4 +62,11 @@ df_image_nontarget           <- df_image_nontarget %>% replace(is.na(.), 0)
 # write data tables as excel files
 write_xlsx(df_image_target, "stim_info_target.xlsx", col_names = TRUE)
 write_xlsx(df_image_nontarget, "stim_info_nontarget.xlsx", col_names = TRUE)
-  
+
+
+dirs$files <- paste(dirs$main, "/imageSequence_generator", sep="")
+
+stim_files <- list.files(path = dirs$files, recursive = TRUE, pattern = "\\.xlsx$") %>%
+  map_dfr(read_excel)
+stim_files_combined <- setNames(lapply(stim_files, read.xlsx), stim_files)
+write_xlsx(stim_files, "stimuli_info_complete.xlsx")
