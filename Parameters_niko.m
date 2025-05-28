@@ -112,7 +112,7 @@ P.prop_untyp = 0.2;
 P.prop_target = 0.1;
 P.prop_nontarget = 0.1;
 
-P.n_trials_per_block = 10;
+P.n_trials_per_block = 20;
 P.n_typ       = ceil(P.prop_typ       * P.n_trials_per_block);
 P.n_untyp     = ceil(P.prop_untyp     * P.n_trials_per_block);
 P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);

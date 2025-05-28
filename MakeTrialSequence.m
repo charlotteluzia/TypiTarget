@@ -204,3 +204,139 @@ for ii = 1:length(P.scene_categories)*P.nblocks_per_category
 
 end
 
+%%
+% Randomization of memory task structure
+
+% Extract unique groups based on category and block_mem_total
+uniqueGroups = unique([string({TM.category})', [TM.block_mem_total]'], 'rows');
+
+% Initialize randomized struct
+randomizedStruct = [];
+
+for i = 1:size(uniqueGroups, 1)
+    % Get current group values
+    currentCategory = uniqueGroups(i, 1);
+    currentBlockMem = str2double(uniqueGroups(i, 2));
+    
+    % Find matching entries
+    matches = arrayfun(@(x) strcmp(string(x.category), currentCategory) && x.block_mem_total == currentBlockMem, TM);
+    
+    % Extract group and randomize
+    group = TM(matches);
+    randIdx = randperm(length(group));
+    randomizedGroup = group(randIdx);
+    
+    % Append to final randomized struct
+    randomizedStruct = [randomizedStruct, randomizedGroup];
+end
+
+
+%%
+% Randomization of memory task structure
+
+% Create keys for grouping based on category and block_mem_total
+groupKeys = strcat(string({TM.category})', "_", string([TM.block_mem_total]'));
+
+% Get unique keys and initialize cell array to hold each group
+[uniqueKeys, ~, groupIndices] = unique(groupKeys);
+groupedStruct = cell(length(uniqueKeys), 1);
+
+% Group and randomize within each group
+for i = 1:length(uniqueKeys)
+    % Get entries in the current group
+    groupMembers = TM(groupIndices == i);
+    
+    % Randomize order within the group
+    randIdx = randperm(length(groupMembers));
+    groupedStruct{i} = groupMembers(randIdx);
+end
+
+% Randomize the order of the groups themselves
+randGroupOrder = randperm(length(groupedStruct));
+groupedStruct = groupedStruct(randGroupOrder);
+
+% Concatenate all randomized groups into a single struct
+%randomizedStruct = vertcat(groupedStruct{:});
+randomizedStruct = horzcat(groupedStruct{:});
+
+%%
+% Randomization of oddball task structure
+
+% Create keys for grouping based on category and block_mem_total
+catKeys = unique([T.block_cat_total]);
+
+% Get unique keys and initialize cell array to hold each group
+% [uniqueCatKeys, ~, groupIndices] = unique(catKeys);
+% groupedCatStruct = cell(length(uniqueCatKeys), 1);
+
+
+
+% Group and randomize within each group
+for i = 1%:length(catKeys)
+    % Get entries in the current group
+    % CatgroupMembers = (T.block_cat_total == i);
+
+    matching = arrayfun(@(x) x.block_cat_total == i, T);
+    CatgroupMembers = T(matching);
+    double_target = 1;
+    double_nontarget = 1;
+    
+    while double_target == 1 | double_nontarget == 1
+        % Randomize order within the group
+        randIdx = randperm(length(CatgroupMembers));
+        %groupedCatStruct{i} = CatgroupMembers(randIdx);
+        randomizedCatGroup = CatgroupMembers(randIdx);
+        %CatgroupMembers = shuffle(CatgroupMembers);
+    
+        % condition of targets not following targets or nontargets and
+        % nontargets not following nontargets or targets
+        % no T-T, T-N, N-N, N-T combinations
+        is_target    = strcmp([randomizedCatGroup.category], 'target');
+        is_nontarget = strcmp([randomizedCatGroup.category], 'nontarget');
+        
+        double_target    = any(diff(is_target) == 0 & is_target(1:end-1) == 1);
+        double_nontarget = any(diff(is_nontarget) == 0 & is_nontarget(1:end-1) == 1);
+    end
+
+end
+
+%%
+
+group_i = struct(size([T.block_cat_total]));
+
+for i = 1:length([T.block_cat_total])
+
+    % Find matching entries
+    matches = arrayfun(@(x) x.block_cat_total == i, T);
+    group = T(matches);
+
+    randi
+
+
+
+
+end
+
+%%
+
+for itrial = 1:length(T)
+    T.(itrial).trial = itrial;
+
+    double_target = 1;
+    double_nontarget = 1;
+    
+    while double_target == 1 | double_nontarget == 1
+    
+        T = shuffle(T);
+    
+        category = [T.category];
+    
+        is_target    = strcmp(category, 'target');
+        is_nontarget = strcmp(category, 'nontarget');
+    
+        double_target    = any(diff(is_target) == 0 & is_target(1:end-1) == 1);
+        double_nontarget = any(diff(is_nontarget) == 0 & is_nontarget(1:end-1) == 1);
+
+
+    end
+end
