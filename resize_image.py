@@ -39,4 +39,34 @@ for infile in sys.argv[1:]:
         except IOError:
             print ("cannot create thumbnail for '%s'", infile)
             
-            
+
+
+def crop_center_square(img):
+    width, height = img.size
+    min_dim = min(width, height)
+    
+    # Calculate cropping box (center square)
+    left = (width - min_dim) // 2
+    top = (height - min_dim) // 2
+    right = left + min_dim
+    bottom = top + min_dim
+
+    return img.crop((left, top, right, bottom))
+
+def crop_to_512(img_path, save_path=None):
+    with Image.open(img_path) as img:
+        # Crop to center square
+        cropped = crop_center_square(img)
+        # Resize to 512x512
+        resized = cropped.resize((512, 512), Image.LANCZOS)
+
+        if save_path:
+            resized.save(save_path)
+        return resized
+
+# Example usage
+#output_image = crop_to_512("C:/Users/User/MATLAB/TypiTarget/stimuli_target/demi-kyu-gZPDNM0VfO8-unsplash.jpg", "output_512.jpg")
+#output_image.show()
+
+output_image = crop_to_512("C:/Users/User/MATLAB/TypiTarget/stimuli_nontarget/pexels-arina-krasnikova-6653896.jpg", "output2.jpg")
+output_image.show()

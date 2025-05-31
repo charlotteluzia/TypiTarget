@@ -232,6 +232,7 @@ end
 
 
 %%
+% UNTIL NOW FINAL VERSION OF MEMORY TASK
 % Randomization of memory task structure
 
 % Create keys for grouping based on category and block_mem_total
@@ -300,22 +301,143 @@ for i = 1%:length(catKeys)
 
 end
 
+
 %%
+% Randomization of oddball task structure
 
-group_i = struct(size([T.block_cat_total]));
+% % Convert struct to table for easier manipulation (if needed)
+% T_table = struct2table(T);
+% 
+% % Get unique block categories
+% blocks = unique(T_table.block_cat_total);
+% numBlocks = length(blocks);
+% 
+% % Create a randomized order of blocks
+% shuffledBlockOrder = blocks(randperm(numBlocks));
+% 
+% finalStruct = struct(); % Preallocate empty struct
+% blockCounter = 1;
+% 
+% for i = 1:numBlocks
+%     % Get rows for this block
+%     blockRows = T_table(T_table.block_cat_total == shuffledBlockOrder(i), :);
+% 
+%     % Randomize block rows
+%     blockRows = blockRows(randperm(height(blockRows)), :);
+% 
+%     % Separate trial types
+%     %targets = blockRows(strcmp(blockRows.category, 'target'), :);
+%     %nontargets = blockRows(strcmp(blockRows.category, 'nontarget'), :);
+% 
+%     % Interleave to avoid consecutive targets/nontargets
+%     %interleavedBlock = interleave_trials(targets, nontargets);
+% 
+%     % Convert to struct and store in finalStruct
+%     %blockStruct = table2struct(interleavedBlock);
+%     blockStruct = table2struct(blockRows);
+%     finalStruct(i) = blockStruct;
+%     blockCounter = blockCounter + 1;
+%     % for j = 1:length(blockStruct)
+%     %     finalStruct(blockCounter) = blockStruct(j);
+%     %     blockCounter = blockCounter + 1;
+%     % end
+% end
+% 
+% 
+% % --- Helper function ---
+% function final = interleave_trials(t, nt)
+%     final = table();
+%     t_idx = 1;
+%     nt_idx = 1;
+% 
+%     % Alternate starting based on longer list
+%     if height(t) >= height(nt)
+%         pick_target = true;
+%     else
+%         pick_target = false;
+%     end
+% 
+%     while t_idx <= height(t) || nt_idx <= height(nt)
+%         if pick_target && t_idx <= height(t)
+%             final = [final; t(t_idx, :)];
+%             t_idx = t_idx + 1;
+%         elseif ~pick_target && nt_idx <= height(nt)
+%             final = [final; nt(nt_idx, :)];
+%             nt_idx = nt_idx + 1;
+%         end
+%         pick_target = ~pick_target; % alternate
+%     end
+% end
 
-for i = 1:length([T.block_cat_total])
+%%
+% Randomization of oddball task structure (NEWEST VERSION)
 
-    % Find matching entries
-    matches = arrayfun(@(x) x.block_cat_total == i, T);
-    group = T(matches);
+% Convert struct to table for easier processing
+T_table = struct2table(T);
 
-    randi
+% Get unique blocks and shuffle them
+blocks = unique(T_table.block_cat_total);
+shuffledBlockOrder = blocks(randperm(length(blocks)));
 
+% Final output as struct array
+finalStruct = struct();
+finalStr = [];
+finalIndex = 1;
 
+for i = 1%:length(shuffledBlockOrder)
+    block_rows = T_table(T_table.block_cat_total == shuffledBlockOrder(i), :);
 
+    % Randomize the rows in this block
+    block_rows = block_rows(randperm(height(block_rows)), :);
 
+    % Attempt to reorder this block with constraints
+    reordered_block = reorder_block_with_constraints(block_rows);
+
+    % Convert to struct and store
+    block_struct = table2struct(reordered_block);
+    block_struct = block_struct.';
+    % finalStruct(finalIndex) = block_struct(i);
+    % finalIndex = finalIndex + 1;
+    finalStruct = [finalStruct, block_struct];
+    % finalStr =  [finalStr, block_struct];
+    % for j = 1:length(block_struct)
+    %     finalStruct(finalIndex) = block_struct(j);
+    %     finalIndex = finalIndex + 1;
+    % end
 end
+
+
+% --- Function to reorder a block avoiding category adjacency conflicts ---
+function ordered = reorder_block_with_constraints(tbl)
+    max_attempts = 1000;
+    for attempt = 1:max_attempts
+        shuffled = tbl(randperm(height(tbl)), :);
+        if is_valid_order(shuffled.category)
+            ordered = shuffled;
+            return;
+        end
+    end
+    error('Could not satisfy category ordering constraints after %d attempts', max_attempts);
+end
+
+% --- Function to check for consecutive category violations ---
+function valid = is_valid_order(category)
+    valid = true;
+    for i = 2:length(category)
+        prev = category{i-1};
+        curr = category{i};
+        if strcmp(prev, 'target') && strcmp(curr, 'target')
+            valid = false; return;
+        elseif strcmp(prev, 'nontarget') && strcmp(curr, 'nontarget')
+            valid = false; return;
+        elseif (strcmp(prev, 'target') && strcmp(curr, 'nontarget')) || ...
+               (strcmp(prev, 'nontarget') && strcmp(curr, 'target'))
+            valid = false; return;
+        end
+    end
+end
+
+
 
 %%
 
