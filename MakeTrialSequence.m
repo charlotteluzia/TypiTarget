@@ -175,13 +175,13 @@ end
 
 %%
 % struct for memory task, including images of oddball task plus new foils
-
-allCatnames = {T.category};
+T_C = T;
+allCatnames = {T_C.category};
 idxDel = contains(allCatnames, 'target');
-T(idxDel) = [];
+T_C(idxDel) = [];
 
-T = cell2struct(struct2cell(T), {'filename', 'category', 'p_typicality', 'mem_block', 'task', 'block_mem_total'});
-TM = [T, M];
+T_C = cell2struct(struct2cell(T), {'filename', 'category', 'p_typicality', 'mem_block', 'task', 'block_mem_total'});
+TM = [T_C, M];
 
 % shuffle images within their indoor scene category (bedroom/living room/kitchen)
 % get index of each image within category to shuffle within 
@@ -380,11 +380,10 @@ blocks = unique(T_table.block_cat_total);
 shuffledBlockOrder = blocks(randperm(length(blocks)));
 
 % Final output as struct array
-finalStruct = struct();
-finalStr = [];
+finalStruct = [];
 finalIndex = 1;
 
-for i = 1%:length(shuffledBlockOrder)
+for i = 1:length(shuffledBlockOrder)
     block_rows = T_table(T_table.block_cat_total == shuffledBlockOrder(i), :);
 
     % Randomize the rows in this block
@@ -396,14 +395,8 @@ for i = 1%:length(shuffledBlockOrder)
     % Convert to struct and store
     block_struct = table2struct(reordered_block);
     block_struct = block_struct.';
-    % finalStruct(finalIndex) = block_struct(i);
-    % finalIndex = finalIndex + 1;
     finalStruct = [finalStruct, block_struct];
-    % finalStr =  [finalStr, block_struct];
-    % for j = 1:length(block_struct)
-    %     finalStruct(finalIndex) = block_struct(j);
-    %     finalIndex = finalIndex + 1;
-    % end
+   
 end
 
 
