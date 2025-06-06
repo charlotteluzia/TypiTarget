@@ -1,4 +1,4 @@
-function  [itrial, M, idx_available, block_mem_total] = get_images(itrial, M, image_table, idx_available, i_mem_block, block_mem_total, n_stim)
+function  [itrial, M, idx_available, block_mem_total] = get_images_mem(itrial, M, image_table, idx_available, i_mem_block, block_mem_total, n_stim)
 
 %%
 for i = 1:n_stim
@@ -10,9 +10,10 @@ for i = 1:n_stim
     M(itrial).filename     = image_table.info(this_img).stimulus;
     M(itrial).category     = image_table.info(this_img).category;
     M(itrial).p_typicality = image_table.info(this_img).p_typicality;
-    M(itrial).mem_block    = i_mem_block;
+    M(itrial).n_block      = i_mem_block;
     M(itrial).task         = 'memory';
-    M(itrial).block_mem_total = block_mem_total;
+    M(itrial).cond         = 'new';
+    M(itrial).block_total  = block_mem_total;
 
     idx_available(1) = [];
 end

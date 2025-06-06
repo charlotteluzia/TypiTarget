@@ -223,6 +223,7 @@ function valid = is_valid_order(category)
     end
 end
 %%
+T_final = [finalStruct, randomizedStruct];
 
 % Combine both structures into one array
 allStructs = [finalStruct, randomizedStruct];
@@ -237,14 +238,14 @@ uniqueBlocks = unique(allBlockTotals);
 randOrder = uniqueBlocks(randperm(length(uniqueBlocks)));
 
 % Initialize combined structure
-T_final = struct([]);
+combinedStruct = struct([]);
 
 % Index for combinedStruct
 idx = 1;
 
 % Loop through each unique block_total value
 for i = 1:length(randOrder)
-    currentBlock = randOrder(i);
+    currentBlock = uniqueBlocks(i);
 
     % Find matching elements in structA
     aMatch = finalStruct([finalStruct.block_total] == currentBlock);
@@ -255,7 +256,7 @@ for i = 1:length(randOrder)
     % Combine them
     group = [aMatch, bMatch];
 
-    T_final = [T_final, group];
+    combinedStruct = [combinedStruct, group];
 
     % Add to combined structure
     % for j = 1:length(group)

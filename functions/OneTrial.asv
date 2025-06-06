@@ -60,11 +60,9 @@ Screen('Close', ImgTex);
 % Evaluate response. 
 % ----------------------------------------------------------------------
 if Info.T(itrial).task == 'oddball'
-    [Info.T(itrial).Report, rt_time, isInvalidResponse] = GetKeyRelease(Info.T(itrial).im_dur, Info.T(itrial).category)
+    [Info.T(itrial).Report, rt_time, isInvalidResponse] = GetKeyRelease(Info.T(itrial).im_dur, Info.T(itrial).task)
 elseif Info.T(itrial).task == 'memory'
-    [Info.T(itrial).Report, rt_time, isInvalidResponse] = GetKeyRelease_andStimOffset()
-end
-
+    [Info.T(itrial).Report, rt_time, isInvalidResponse] = GetKeyRelease
 % Response time
 Info.T(itrial).RT = rt_time - tImageOn;
 

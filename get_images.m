@@ -13,9 +13,10 @@ for i = 1:n_stim
     T(itrial).filename        = image_table.info(this_img).stimulus;
     T(itrial).category        = image_table.info(this_img).category;
     T(itrial).p_typicality    = image_table.info(this_img).p_typicality;
-    T(itrial).cat_block       = i_cat_block;
+    T(itrial).n_block         = i_cat_block;
     T(itrial).task            = 'oddball';
-    T(itrial).block_cat_total = block_cat_total;
+    T(itrial).cond            = 'old';
+    T(itrial).block_total     = block_cat_total;
 
     idx_available(1) = [];
 end

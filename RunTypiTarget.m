@@ -30,23 +30,11 @@ Info.DateTime          = {datestr(clock)};
 Info.P                 = P;
 
 %% --------------------------------------------------------------------
-% Define parameters of block number 
-% ---------------------------------------------------------------------
-cat_num_block = 1;
-rep_num = 1;
-
-%% --------------------------------------------------------------------
 % Define trials.
 % ---------------------------------------------------------------------
-% T struct for each room category, with info about filename and room
-% category
+[Info.TO, Info.TM] = MakeTrialSequence(P);
 
-for itrial = 1:length(Info.T)
-    iImage = ImageIdx(Info.T(itrial).stimulus_idx);
-    Info.T(itrial).filename       = strtrim(AvailImageNames(iImage,:));
-    Info.T(itrial).category_name  = strtrim(AvailImageCategorNames(iImage,:));
-    
-end
+
 
 %% ------------------------------------------------------------------------
 % Open trigger port.
@@ -69,20 +57,6 @@ P.Black        = BlackIndex(P.PresentScreen);
 P.FrDuration   = (Screen( window, 'GetFlipInterval')); % in ms
 
 
-%% ------------------------------------------------------------------------
-% Define the default background of this experiment.
-% ------------------------------------------------------------------------
-global DefaultScreen
-DefaultScreen = Screen( 'OpenOffscreenWindow', window, P.BgColor );
-% tw = RectWidth(Screen('TextBounds',  window, P.cue_text{Info.P.ResponseMapping(1)}));
-%th = RectHeight(Screen('TextBounds', window, P.cue_text{Info.P.ResponseMapping(1)}));
-%Screen(DefaultScreen, 'DrawText', P.cue_text{Info.P.ResponseMapping(1)}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, [180, 180, 180]);
-%Screen(DefaultScreen, 'DrawText', P.cue_text{Info.P.ResponseMapping(2)}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, [180, 180, 180]);
-Screen(DefaultScreen,'DrawLine',[255 0 0], P.CenterX-10,P.CenterY,P.CenterX+10,P.CenterY,2);
-Screen(DefaultScreen,'DrawLine',[255 0 0], P.CenterX,P.CenterY-10,P.CenterX,P.CenterY+10,2);
-%my_fixationpoint(DefaultScreen, P.CenterX, P.CenterY, 5, [100 100 100]);
-
-
 %% --------------------------------------------------------------------
 % Run across trials.
 %----------------------------------------------------------------------
@@ -95,13 +69,22 @@ tic;
 
 % ----- Loop over trials -----
 % isQuit = false;
-
-for t = 1:1%length(Info.T)
+Exp = Info.TO + Info.TM;
+for itrial = 1:length(T_final)
     
     % Run the trial.
-    Priority(double(~P.doSkipSyncTest));
-    [Info] = OneTrial(t);
-    Priority(0);
+    [Info] = OneTrial(itrial);
+
+
+
+    % Update Info structure.
+    Info.T(itrial).TrialCompleted = 1;
+    Info.T(itrial).ImgDur = P.ImgDuration;
+    Info.ntrials = t;
+    Info.tTotal  = toc;
+    Info.tFinish = {datestr(clock)};
+    
+    save(Info.Logfilename, 'Info');
 
 end
 
