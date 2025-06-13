@@ -34,7 +34,14 @@ else
        
 end
 
-
+%%
+switch P.Flavor
+    case 'training'
+        P.doFeedback = 1;
+        P.FeedbackDuration = 0.2;
+    otherwise
+        P.doFeedback = 0;
+end
 %% -----------------------------------------------------------------------
 % Parameters of the display.
 % Calculate size of a pixel in visual angles.
@@ -88,8 +95,8 @@ P.cat_cues = {'[f]', '[j]'};
 % P.cat_cuesLocation =
 
 P.mem_cues = {'[d]', '[f]', '[j]', '[k]'};
-P.mem_responseText = {'[certainly old]', '[rather old]', '[rather new]', '[certainly new]'};
-% P.mem_responseText = {'[sicher alt]', '[eher alt]', '[eher neu]', '[sicher neu]'};
+% P.mem_responseText = {'[certainly old]', '[rather old]', '[rather new]', '[certainly new]'};
+P.mem_responseText = {'[sicher alt]', '[eher alt]', '[eher neu]', '[sicher neu]'};
 
 %P.mem_location
 

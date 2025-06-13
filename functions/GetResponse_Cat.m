@@ -5,32 +5,29 @@ function [ Report, secs ] = GetResponse(P, timeout)
 % if timeout == 0, then function waits until button is pressed.
 
 secs = 0;
-Report = [];
-
 now = GetSecs;
+Report = 0;
+isQuit = 0;
 
 if timeout==0
-    stop = inf;% no time out, wait forever
+    stop = 2000;% no time out, wait forever
 else
     stop = now + timeout;
 end
-
 
 while GetSecs < stop
 % while Report==0
     [keyIsDown,secs,keyCode] = KbCheck;
     if keyIsDown
-        if keyCode(P.OldKey)
+        if keyCode(P.NewKey)
             Report = 1;
-            return
-        elseif keyCode(P.NewKey)
-            Report = 0;
             return
         elseif keyCode(P.Quitkey)
             Report = 99;
             return;
         end;
-        
+    else 
+        Report = 0; % no behavioural response if nontarget or standard is shown
     end;
     WaitSecs(.01); %It is a good habit not to poll as fast as possible
 end;

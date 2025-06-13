@@ -1,3 +1,4 @@
+function Info = RunTypiTarget(name, flavour)
 % Oddball/Three Stimulus + Memory task Paradigm
 % main script for testing 
 % 
@@ -17,6 +18,9 @@ addpath('./Functions');
 addpath('./stimuli');
 global Info P
 
+%  provides control over random number generation, creating a seed based on the current time
+rng("shuffle");
+
 
 %% --------------------------------------------------------------------
 % Initiate file names and load Parameters.
@@ -34,7 +38,17 @@ Info.P                 = P;
 % ---------------------------------------------------------------------
 [Info.TO, Info.TM] = MakeTrialSequence(P);
 
+%% --------------------------------------------------------------------
+% Run either test or full experiment by determining flavour
+% ---------------------------------------------------------------------
 
+switch flavor
+    case 'training'
+        Info.T_fin = MakeTrainingSequence(P);
+        
+    otherwise
+        Info.T_fin = MakeTrialSequence(P);
+end
 
 %% ------------------------------------------------------------------------
 % Open trigger port.
@@ -70,7 +84,7 @@ tic;
 % ----- Loop over trials -----
 % isQuit = false;
 Exp = Info.TO + Info.TM;
-for itrial = 1:length(T_final)
+for itrial = 1:length(T_fin)
     
     % Run the trial.
     [Info] = OneTrial(itrial);
@@ -78,8 +92,8 @@ for itrial = 1:length(T_final)
 
 
     % Update Info structure.
-    Info.T(itrial).TrialCompleted = 1;
-    Info.T(itrial).ImgDur = P.ImgDuration;
+    Info.T_fin(itrial).TrialCompleted = 1;
+    Info.T_fin(itrial).ImgDur = P.ImgDuration;
     Info.ntrials = t;
     Info.tTotal  = toc;
     Info.tFinish = {datestr(clock)};

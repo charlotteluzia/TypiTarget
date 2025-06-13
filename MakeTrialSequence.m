@@ -1,4 +1,4 @@
-%function [T_final] = MakeTrialSequence(P)
+%function [T_fin] = MakeTrialSequence(P)
 %%
 % read excel files with image name and category
 % in case of indoor scene stimuli (bedroom/living room/kitchen) additional
@@ -127,7 +127,7 @@ T_C.task = strrep(T_C.task, 'oddball', 'memory');
 T_C = table2struct(T_C);
 T_C = T_C.';
 
-T_C = cell2struct(struct2cell(T_C), {'filename', 'category', 'p_typicality', 'mem_block', 'task', 'block_mem_total'});
+T_C = cell2struct(struct2cell(T_C), {'filename', 'category', 'p_typicality', 'n_block', 'task', 'cond', 'block_total'});
 TM = [T_C, M];
 
 
@@ -237,7 +237,7 @@ uniqueBlocks = unique(allBlockTotals);
 randOrder = uniqueBlocks(randperm(length(uniqueBlocks)));
 
 % Initialize combined structure
-T_final = struct([]);
+T_fin = struct([]);
 
 % Index for combinedStruct
 idx = 1;
@@ -255,7 +255,7 @@ for i = 1:length(randOrder)
     % Combine them
     group = [aMatch, bMatch];
 
-    T_final = [T_final, group];
+    T_fin = [T_fin, group];
 
     % Add to combined structure
     % for j = 1:length(group)
