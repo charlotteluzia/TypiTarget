@@ -1,4 +1,4 @@
-function [ Report, secs ] = GetResponse(P, timeout)
+function [ Report, secs ] = GetResponse_Cat(P, timeout)
 
 % timeout determines when to stop polling for responses. 
 % timeout gives a value in seconds from NOW.
@@ -10,7 +10,7 @@ Report = 0;
 isQuit = 0;
 
 if timeout==0
-    stop = 2000;% no time out, wait forever
+    stop = 2000;
 else
     stop = now + timeout;
 end

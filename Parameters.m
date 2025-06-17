@@ -52,6 +52,7 @@ P.CenterY      = P.myHeight/2;
 P.res   = [P.myWidth P.myHeight]; % monitor resolution
 P.sz    = [36 27];                % monitor size in cm
 P.vdist = [55];                   % distance of observer from monitor
+% P.screen.viewdist = 86; % used to be 55? why?
 [P.pixperdeg, P.degperpix] = VisAng(P);
 P.pixperdeg = mean(P.pixperdeg);
 P.degperpix = mean(P.degperpix);
@@ -85,18 +86,15 @@ P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
 %% -----------------------------------------------------------------------
 % Parameters of categorization and memory task
 %  -----------------------------------------------------------------------
-P.cat_text = {'[Press j if the image shows a supermarket]'}; % count occurences of supermarkets by pressing button
-P.cat_cues = {'[f]', '[j]'};
+% P.cat_text = {'[Press j if the image shows a supermarket]'}; % count occurences of supermarkets by pressing button
+% P.cat_cues = {'[f]', '[j]'};
 % P.cat_responseText = {'[no]', '[yes]'};
 % P.cat_responseText = {'[nein]', '[ja]'};
 
-% present question above image, cues in lower corners
-% P.cat_textLocation = ;
-% P.cat_cuesLocation =
 
 P.mem_cues = {'[d]', '[f]', '[j]', '[k]'};
-% P.mem_responseText = {'[certainly old]', '[rather old]', '[rather new]', '[certainly new]'};
 P.mem_responseText = {'[sicher alt]', '[eher alt]', '[eher neu]', '[sicher neu]'};
+% P.mem_responseText = {'[certainly old]', '[rather old]', '[rather new]', '[certainly new]'};
 
 %P.mem_location
 
@@ -105,7 +103,6 @@ P.mem_responseText = {'[sicher alt]', '[eher alt]', '[eher neu]', '[sicher neu]'
 %  -----------------------------------------------------------------------
 P.BreakAfternTrials = (P.n_typ + P.n_untyp + P.n_target + P.n_nontarget)*2 - (P.n_target + P.n_nontarget);
 
-P.nTrials = 100;
 
 % Timing parameters.
 P.ImgDur  = 0.700;

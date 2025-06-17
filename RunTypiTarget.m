@@ -34,11 +34,6 @@ Info.DateTime          = {datestr(clock)};
 Info.P                 = P;
 
 %% --------------------------------------------------------------------
-% Define trials.
-% ---------------------------------------------------------------------
-[Info.TO, Info.TM] = MakeTrialSequence(P);
-
-%% --------------------------------------------------------------------
 % Run either test or full experiment by determining flavour
 % ---------------------------------------------------------------------
 
@@ -50,14 +45,14 @@ switch flavor
         Info.T_fin = MakeTrialSequence(P);
 end
 
+%% --------------------------------------------------------------------
+% Define trials
+% ---------------------------------------------------------------------
+[Info.T_fin] = MakeTrialSequence(P);
+
 %% ------------------------------------------------------------------------
-% Open trigger port.
-% Open display.
+% Open display
 % ------------------------------------------------------------------------
-if P.isEEG
-    OpenTriggerPort;
-    SendTrigger(P.TriggerStartRecording, P.TriggerDuration);
-end
 
 global window
 Screen('Preference', 'SkipSyncTests', P.doSkipSyncTest);
@@ -70,6 +65,16 @@ P.White        = WhiteIndex(P.PresentScreen);
 P.Black        = BlackIndex(P.PresentScreen);
 P.FrDuration   = (Screen( window, 'GetFlipInterval')); % in ms
 
+%% ------------------------------------------------------------------------
+% Define the background for the memory task of this experiment
+% ------------------------------------------------------------------------
+global DefaultMemScreen
+DefaultMemScreen = Screen( 'OpenOffscreenWindow', window, P.BgColor );
+tw = RectWidth(Screen('TextBounds',  window, P.cue_text{Info.P.ResponseMapping(1)}));
+th = RectHeight(Screen('TextBounds', window, P.cue_text{Info.P.ResponseMapping(1)}));
+Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.ResponseMapping(1)}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, [180, 180, 180]);
+Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.ResponseMapping(2)}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, [180, 180, 180]);
+my_fixationpoint(DefaultMemScreen, P.CenterX, P.CenterY, 5, [100 100 100]);
 
 %% --------------------------------------------------------------------
 % Run across trials.
@@ -83,13 +88,15 @@ tic;
 
 % ----- Loop over trials -----
 % isQuit = false;
-Exp = Info.TO + Info.TM;
 for itrial = 1:length(T_fin)
     
     % Run the trial.
-    [Info] = OneTrial(itrial);
+    [Info, isQuit] = OneTrial(itrial);
 
-
+    if isQuit
+        disp('Quit.')
+        break
+    end
 
     % Update Info structure.
     Info.T_fin(itrial).TrialCompleted = 1;

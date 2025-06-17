@@ -20,12 +20,6 @@ else
 end
 
 
-% Send trigger.
-% if P.isEEG
-%         Trigger = P.UseTriggers(Info.T(itrial).presentation_no, Info.T(itrial).category_index, 1);
-%     SendTrigger(Trigger, P.TriggerDuration);
-% end
-
 Info.T_fin(itrial).ISI = P.ISI_Dur;
 
 
@@ -53,12 +47,6 @@ if strcmp(Info.T_fin(itrial).task, 'oddball')
     Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
 end
 
-% Send trigger.
-if P.isEEG
-        Trigger = P.UseTriggers(Info.T_fin(itrial).presentation_no, Info.T_fin(itrial).category_index, 2);
-    SendTrigger(Trigger, P.TriggerDuration);
-end
-
 
 
 % ----------------------------------------------------------------------
@@ -67,7 +55,7 @@ end
 if strcmp(Info.T_fin(itrial).task,'oddball')
     [Info.T_fin(itrial).Report, rt_time, isInvalidResponse] = GetKeyRelease(Info.T_fin(itrial).img_dur, Info.T_fin(itrial).category)
 elseif strcmp(Info.T_fin(itrial).task, 'memory')
-    [Info.T_fin(itrial).Report, rt_time, isInvalidResponse] = GetResponse_Mem(P)
+    [Info.T_fin(itrial).Report, rt_time] = GetResponse_Mem(P)
     Screen('Close', ImgTex); 
 end
 
@@ -80,7 +68,11 @@ Info.T_fin(itrial).RT = rt_time - tImageOn;
 if Info.T_fin(itrial).Report==99
     isQuit = true;
 
-elseif Info.T_fin(itrial).Report
+elseif Info.T_fin(itrial).Report==1
+    isQuit = false;
+    Info.T_fin(itrial).odd_resp = 1;
+elseif Info.T_fin(itrial).Report==0
+    Info.T_fin(itrial).odd_resp = 0;
 
 end
 % 
@@ -95,11 +87,25 @@ elseif Info.T_fin(itrial).Report == 1 | Info.T_fin(itrial).Report == 2 | ...
        Info.T_fin(itrial).Report == 3 | Info.T_fin(itrial).Report == 4
     isQuit = false;
 
-    if strcmp('[alt]' | '[sicher alt]', P.cue_text{Info.P.ResponseMapping(Info.T(t).Report)})
-        Info.T(t).ReportOld = 1;
-    elseif strcmp('[Neu]', P.cue_text{Info.P.ResponseMapping(Info.T(t).Report)})
-        Info.T(t).ReportOld = 0;
+    if Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'old')
+        Info.T_fin(itrial).mem_resp = 1;
+    elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'old')
+        Info.T_fin(itrial).mem_resp = 1;
+    elseif Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'new')
+        Info.T_fin(itrial).mem_resp = 0;
+    elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'new')
+        Info.T_fin(itrial).mem_resp = 0;
+    elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'old')
+        Info.T_fin(itrial).mem_resp = 0;
+    elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'old')
+        Info.T_fin(itrial).mem_resp = 0;
+    elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'new')
+        Info.T_fin(itrial).mem_resp = 1;
+    elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'new')
+        Info.T_fin(itrial).mem_resp = 1;
+
     end
+   
 
 end
 
@@ -107,16 +113,16 @@ end
 isOld = strcmp(Info.T(itrial).cond, 'old');
 
 if isOld & Info.T(t).ReportOld==1
-    Info.T(t).ReportCorrect = 1;
+    Info.T(t).mem_response = 1;
     fprintf('Correct.\n');
 elseif isOld & Info.T(t).ReportOld==0
-    Info.T(t).ReportCorrect = 0;
+    Info.T(t).mem_response = 0;
     fprintf('Error.\n');
 elseif ~isOld & Info.T(t).ReportOld==1
-    Info.T(t).ReportCorrect = 0;
+    Info.T(t).mem_response = 0;
     fprintf('Error.\n');
 elseif ~isOld & Info.T(t).ReportOld==0
-    Info.T(t).ReportCorrect = 1;
+    Info.T(t).mem_response = 1;
     fprintf('Correct.\n');
 end
 
@@ -125,9 +131,9 @@ end
 % ----------------------------------------------------------------------
 if P.doFeedback
     Screen('DrawTexture', window, DefaultScreen);
-    if Info.T(t).ReportCorrect==1
+    if Info.T(t).mem_response==1
         my_fixationpoint(window, P.CenterX, P.CenterY, 5, [0 200 0])
-    elseif Info.T(t).ReportCorrect==0
+    elseif Info.T(t).mem_response==0
         my_fixationpoint(window, P.CenterX, P.CenterY, 5, [200 0 0])
     else
         my_fixationpoint(window, P.CenterX, P.CenterY, 15, [200 200 0])
@@ -135,12 +141,7 @@ if P.doFeedback
         
     [VBLTimestamp, t_imageoffset] = Screen('Flip', window);
     
-    % Send trigger.
-    % if P.isEEG
-    %     Trigger = P.UseTriggers(Info.T(t).presentation_no, Info.T(t).category_index, 4);
-    %     SendTrigger(Trigger, P.TriggerDuration);
-    % end
-    % 
+    
     WaitSecs(P.FeedbackDuration);
 
 end
