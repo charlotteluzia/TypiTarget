@@ -4,16 +4,28 @@
 % in case of indoor scene stimuli (bedroom/living room/kitchen) additional
 % ratings of typicality available, typicality ratings serve as criterion of
 % selection 
-stim_140            = readtable(P.stim_140);
-match               = wildcardPattern + '/';
-stim_140.stimulus   = erase(stim_140.stimulus, match);
-stim_targets_idx    = readtable(P.stim_target);
-stim_nontargets_idx = readtable(P.stim_nontarget);
-stim_targets        = table2struct(stim_targets_idx);
-stim_nontargets     = table2struct(stim_nontargets_idx);
-stim_targets        = struct('info', stim_targets);
-stim_nontargets     = struct('info', stim_nontargets);
 
+switch P.Flavor
+    case 'training'
+        stim_140            = readtable(P.stim_140);
+        stim_targets_idx    = readtable(P.stim_target);
+        stim_nontargets_idx = readtable(P.stim_nontarget);
+        stim_targets        = table2struct(stim_targets_idx);
+        stim_nontargets     = table2struct(stim_nontargets_idx);
+        stim_targets        = struct('info', stim_targets);
+        stim_nontargets     = struct('info', stim_nontargets);
+
+    otherwise
+        stim_140            = readtable(P.stim_140);
+        match               = wildcardPattern + '/';
+        stim_140.stimulus   = erase(stim_140.stimulus, match);
+        stim_targets_idx    = readtable(P.stim_target);
+        stim_nontargets_idx = readtable(P.stim_nontarget);
+        stim_targets        = table2struct(stim_targets_idx);
+        stim_nontargets     = table2struct(stim_nontargets_idx);
+        stim_targets        = struct('info', stim_targets);
+        stim_nontargets     = struct('info', stim_nontargets);
+end
 %%
 % get info for room categories for standard stimuli
 stim_select = struct([]);

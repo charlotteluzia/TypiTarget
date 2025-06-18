@@ -1,6 +1,6 @@
 function [Info] = OneTrial(itrial)
 
-global window Info P DefaultScreen;
+global window Info P DefaultMemScreen;
 % ----------------------------------------------------------------------
 % Present pause a regular intervals and when a new block starts.
 % ----------------------------------------------------------------------
@@ -38,13 +38,27 @@ ImgTex     = Screen('MakeTexture', window, Img);
 % ----------------------------------------------------------------------
 % Present image after ISI is over 
 % ----------------------------------------------------------------------
-Screen('DrawTexture', window, DefaultScreen);
-Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
-[tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
+% Screen('DrawTexture', window, DefaultScreen);
+% Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
+% [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
 
 Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
 if strcmp(Info.T_fin(itrial).task, 'oddball')
+    Screen('DrawTexture', window);
+    Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
+    [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
+
+    Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
+
     Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
+
+else
+    Screen('DrawTexture', window, DefaultMemScreen);
+    Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
+    [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
+
+    Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
+
 end
 
 
@@ -53,7 +67,7 @@ end
 % Evaluate response. 
 % ----------------------------------------------------------------------
 if strcmp(Info.T_fin(itrial).task,'oddball')
-    [Info.T_fin(itrial).Report, rt_time, isInvalidResponse] = GetKeyRelease(Info.T_fin(itrial).img_dur, Info.T_fin(itrial).category)
+    [Info.T_fin(itrial).Report, rt_time] = GetResponse_Cat(Info.T_fin(itrial).img_dur, Info.T_fin(itrial).category)
 elseif strcmp(Info.T_fin(itrial).task, 'memory')
     [Info.T_fin(itrial).Report, rt_time] = GetResponse_Mem(P)
     Screen('Close', ImgTex); 
@@ -72,6 +86,7 @@ elseif Info.T_fin(itrial).Report==1
     isQuit = false;
     Info.T_fin(itrial).odd_resp = 1;
 elseif Info.T_fin(itrial).Report==0
+    isQuit = false;
     Info.T_fin(itrial).odd_resp = 0;
 
 end

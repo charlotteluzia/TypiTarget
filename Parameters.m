@@ -60,11 +60,15 @@ P.degperpix = mean(P.degperpix);
 P.BgColor    = [192 192 192]; % 0 * 255;
 P.TextColor  = [100 100 100];
 P.StuffColor = [50 50 50]; % Color for everything on the display except targets, e.g. fixation mark.
+P.mem_cueColor = [180 180 180];
 
 % Present instructional cues in the lower corners.
 P.cueXoffset = 300;
 P.cueYoffset = 100;
-P.cue_text   = {'[Alt]', '[Neu]'};
+P.mem_cueCertainOld = {'[sicher alt]'};
+P.mem_cueOld        = {'[eher alt]'};
+P.mem_cueNew        = {'[eher neu]'};
+P.mem_cueCertainNew = {'[sicher neu]'};
 
 
 %% -----------------------------------------------------------------------
@@ -73,7 +77,6 @@ P.cue_text   = {'[Alt]', '[Neu]'};
 KbName('UnifyKeyNames');    
 P.Quitkey = KbName('ESCAPE');
 
-P.NoKey   = KbName('f');
 P.YesKey  = KbName('j');
 
 P.CertainOldKey = KbName('d');
@@ -116,18 +119,41 @@ P.prop_untyp = 0.2;
 P.prop_target = 0.1;
 P.prop_nontarget = 0.1;
 
-P.n_trials_per_block = 20;
-P.n_typ       = ceil(P.prop_typ       * P.n_trials_per_block);
-P.n_untyp     = ceil(P.prop_untyp     * P.n_trials_per_block);
-P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
-P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
+switch P.Flavor
+    case 'training'
+        P.scene_categories = {''};
+        P.nblocks_per_category = 1;
+        P.n_trials_per_block = 20;
 
-P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'};
-P.nblocks_per_category = 2;
+        P.stim_140       = 'stimuli_training.xlsx';
+        P.stim_target    = 'stimuli_training_target.xlsx';
+        P.stim_nontarget = 'stimuli_training_nontarget.xlsx';
 
-P.stim_140       = 'stimuli_info_140.xlsx';
-P.stim_target    = 'stimuli_info_target.xlsx';
-P.stim_nontarget = 'stimuli_info_nontarget.xlsx';
+        P.n_standard  = ceil((P.prop_typ + P.prop_untyp) * P.ntrial_per_block);
+        P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
+        P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
+
+
+    otherwise
+        P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'};
+        P.nblocks_per_category = 2;
+        P.n_trials_per_block = 20;
+
+        P.stim_140       = 'stimuli_info_140.xlsx';
+        P.stim_target    = 'stimuli_info_target.xlsx';
+        P.stim_nontarget = 'stimuli_info_nontarget.xlsx';
+
+        P.n_typ       = ceil(P.prop_typ       * P.n_trials_per_block);
+        P.n_untyp     = ceil(P.prop_untyp     * P.n_trials_per_block);
+        P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
+        P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
+
+
+end
+
+
+
+
 
 
 

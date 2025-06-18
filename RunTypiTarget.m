@@ -1,4 +1,4 @@
-function Info = RunTypiTarget(name, flavour)
+function Info = RunTypiTarget(name, flavor)
 % Oddball/Three Stimulus + Memory task Paradigm
 % main script for testing 
 % 
@@ -9,6 +9,23 @@ close all;
 
 % participant number, e.g. 01
 name = '';
+
+%% ---------------------------------------------------------------------
+% Check if inputs are correct..
+% ---------------------------------------------------------------------
+if nargin ~= 2
+    warning('You need to specify two input arguments: name and flavor.')
+    warning('Quitting now.')
+    return
+else
+    allowed_flavors = {'training', 'typitarget'};
+    if ~ismember(flavor, allowed_flavors)
+    warning('Flavor can be "training" or "typitarget".')
+    warning('Quitting now.')
+    return
+    end
+end
+
 
 %% ---------------------------------------------------------------------
 % Add paths and initialize global variables. and test if logfile exists for this subject.
@@ -23,17 +40,6 @@ rng("shuffle");
 
 
 %% --------------------------------------------------------------------
-% Initiate file names and load Parameters.
-% ---------------------------------------------------------------------
-[P] = Parameters(P);
-
-Info                   = struct;
-Info.name              = name;
-Info.Logfilename       = ['Logfiles' filesep 'TypT' name '_logfile.mat'];
-Info.DateTime          = {datestr(clock)};
-Info.P                 = P;
-
-%% --------------------------------------------------------------------
 % Run either test or full experiment by determining flavour
 % ---------------------------------------------------------------------
 
@@ -45,10 +51,30 @@ switch flavor
         Info.T_fin = MakeTrialSequence(P);
 end
 
+
+%% --------------------------------------------------------------------
+% Initiate file names and load Parameters.
+% ---------------------------------------------------------------------
+P.Flavor = flavor;
+
+[P] = Parameters(P);
+
+Info                   = struct;
+Info.name              = name;
+Info.Logfilename       = ['Logfiles' filesep 'TypT' name '_logfile.mat'];
+Info.DateTime          = {datestr(clock)};
+Info.P                 = P;
+
 %% --------------------------------------------------------------------
 % Define trials
 % ---------------------------------------------------------------------
-[Info.T_fin] = MakeTrialSequence(P);
+switch flavor
+    case 'training'
+        [Info.T_fin] = MakeTrainingSequence(P);
+    otherwise
+        [Info.T_fin] = MakeTrialSequence(P);
+end
+
 
 %% ------------------------------------------------------------------------
 % Open display
@@ -69,11 +95,13 @@ P.FrDuration   = (Screen( window, 'GetFlipInterval')); % in ms
 % Define the background for the memory task of this experiment
 % ------------------------------------------------------------------------
 global DefaultMemScreen
-DefaultMemScreen = Screen( 'OpenOffscreenWindow', window, P.BgColor );
-tw = RectWidth(Screen('TextBounds',  window, P.cue_text{Info.P.ResponseMapping(1)}));
-th = RectHeight(Screen('TextBounds', window, P.cue_text{Info.P.ResponseMapping(1)}));
-Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.ResponseMapping(1)}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, [180, 180, 180]);
-Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.ResponseMapping(2)}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, [180, 180, 180]);
+DefaultMemScreen = Screen('OpenOffscreenWindow', window, P.BgColor);
+tw = RectWidth(Screen('TextBounds',  window, P.mem_cueText));
+th = RectHeight(Screen('TextBounds', window, P.mem_cueText));
+Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueCertainOld}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueOld}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueCertainNew}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueNew}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset ,P.mem_cueColor);
 my_fixationpoint(DefaultMemScreen, P.CenterX, P.CenterY, 5, [100 100 100]);
 
 %% --------------------------------------------------------------------
