@@ -1,0 +1,190 @@
+function [Info, isQuit] = OneTrial(itrial)
+
+global window Info P DefaultScreen;
+% ----------------------------------------------------------------------
+% Present pause a regular intervals and when a new block starts.
+% ----------------------------------------------------------------------
+if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
+    PresentPause(window, P, Info, itrial)
+end 
+
+% ----------------------------------------------------------------------
+% Display trial info on experimenter's screen.
+% ----------------------------------------------------------------------
+switch P.Flavor
+    case 'training'
+        fprintf('Training session. Trial %d of %d. Presentation %d of %d. ', itrial, length(Info.T_fin));
+        
+    case 'full'     
+        fprintf('Full experiment. Trial %d of %d. Presentation %d of %d. ', itrial, length(Info.T_fin));
+            
+end
+
+% ----------------------------------------------------------------------
+% Wait until subject presses both buttons.
+% ----------------------------------------------------------------------
+isQuit = WaitUntilBothButtonsArePressed(P);
+if isQuit
+    return
+end
+
+
+% ----------------------------------------------------------------------
+% Fixation cross and random-length inter-stimulus interval 
+% ----------------------------------------------------------------------
+if (strcmp(Info.T_fin(itrial).task,'oddball'))
+    Screen('DrawTexture', window, DefaultScreen);
+    [tISIon] = Screen('Flip', window);
+else 
+    Screen('DrawTexture', window, MemScreen);
+    [tISIon] = Screen('Flip', window);
+end
+
+
+Info.T_fin(itrial).ISI = P.ISI_Dur;
+
+
+% ----------------------------------------------------------------------
+% Prepare images
+% ----------------------------------------------------------------------
+%Img = imread(fullfile(P.ImagePath, 'img_pbsj1.png'));
+Img = imread(fullfile(P.ImagePath, Info.T_fin(itrial).filename));
+
+ImgTex     = Screen('MakeTexture', window, Img);    
+%ImgRect    = Screen('Rect', ImgTex); 
+%scaledrect = ScaleRect(ImgRect);
+%ImgRect    = CenterRectOnPoint(scaledrect, P.CenterX, P.CenterY);   
+
+
+% ----------------------------------------------------------------------
+% Present image after ISI is over 
+% ----------------------------------------------------------------------
+% Screen('DrawTexture', window, DefaultScreen);
+% Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
+% [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
+
+% Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
+if strcmp(Info.T_fin(itrial).task, 'oddball')
+    Screen('DrawTexture', window, DefaultScreen);
+    Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
+    [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
+
+    Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
+
+    Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
+
+else
+    Screen('DrawTexture', window, DefaultScreen);
+    Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
+    [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
+
+    Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
+
+end
+
+
+
+% ----------------------------------------------------------------------
+% Evaluate response. 
+% ----------------------------------------------------------------------
+if strcmp(Info.T_fin(itrial).task,'oddball')
+    [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(P, Info.T_fin(itrial).img_dur);
+
+    % Response time
+    Info.T_fin(itrial).RT = rt_time - tImageOn;
+    
+    % Oddball task
+    % did the subject detect the target?
+    if Info.T_fin(itrial).Report==99
+        isQuit = true;
+    
+    elseif Info.T_fin(itrial).Report==1
+        isQuit = false;
+        Info.T_fin(itrial).odd_resp = 1;
+    elseif Info.T_fin(itrial).Report==0
+        isQuit = false;
+        Info.T_fin(itrial).odd_resp = 0;
+    
+    end
+
+elseif strcmp(Info.T_fin(itrial).task, 'memory')
+    [Info.T_fin(itrial).Report, rt_time] = GetResponse_Mem(P);
+
+    % Response time
+    Info.T_fin(itrial).RT = rt_time - tImageOn;
+
+    % Memory task
+    % did the subject say "(rather)/old" or "(rather)/new"?
+    if Info.T_fin(itrial).Report==99
+        isQuit = true;
+    
+    elseif Info.T_fin(itrial).Report == 1 || Info.T_fin(itrial).Report == 2 || ...
+           Info.T_fin(itrial).Report == 3 || Info.T_fin(itrial).Report == 4
+        isQuit = false;
+    
+        if Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'old')
+            Info.T_fin(itrial).mem_resp = 1;
+        elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'old')
+            Info.T_fin(itrial).mem_resp = 1;
+        elseif Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'new')
+            Info.T_fin(itrial).mem_resp = 0;
+        elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'new')
+            Info.T_fin(itrial).mem_resp = 0;
+        elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'old')
+            Info.T_fin(itrial).mem_resp = 0;
+        elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'old')
+            Info.T_fin(itrial).mem_resp = 0;
+        elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'new')
+            Info.T_fin(itrial).mem_resp = 1;
+        elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'new')
+            Info.T_fin(itrial).mem_resp = 1;
+    
+        end
+       
+    
+    end
+    
+    % And was this correct or wrong?
+    isOld = strcmp(Info.T_fin(itrial).cond, 'old');
+    
+    if isOld & Info.T_fin(itrial).ReportOld==1
+        Info.T_fin(itrial).mem_response = 1;
+        fprintf('Correct.\n');
+    elseif isOld & Info.T_fin(itrial).ReportOld==0
+        Info.T_fin(itrial).mem_response = 0;
+        fprintf('Error.\n');
+    elseif ~isOld & Info.T_fin(itrial).ReportOld==1
+        Info.T_fin(itrial).mem_response = 0;
+        fprintf('Error.\n');
+    elseif ~isOld & Info.T_fin(itrial).ReportOld==0
+        Info.T_fin(itrial).mem_response = 1;
+        fprintf('Correct.\n');
+    end
+
+    Screen('Close', ImgTex); 
+end
+
+
+% 
+
+
+
+% ----------------------------------------------------------------------
+% Present Feedback. 
+% ----------------------------------------------------------------------
+if P.doFeedback
+    Screen('DrawTexture', window, DefaultScreen);
+    if Info.T(t).mem_response==1
+        my_fixationpoint(window, P.CenterX, P.CenterY, 5, [0 200 0])
+    elseif Info.T(t).mem_response==0
+        my_fixationpoint(window, P.CenterX, P.CenterY, 5, [200 0 0])
+    else
+        my_fixationpoint(window, P.CenterX, P.CenterY, 15, [200 200 0])
+    end
+        
+    [VBLTimestamp, t_imageoffset] = Screen('Flip', window);
+    
+    
+    WaitSecs(P.FeedbackDuration);
+
+end

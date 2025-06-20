@@ -36,8 +36,8 @@ while GetSecs < stop
         elseif keyCode(P.Quitkey)
             Report = 99;
             return;
-        end;
+        end
         
-    end;
+    end
     WaitSecs(.01); %It is a good habit not to poll as fast as possible
-end;
+end

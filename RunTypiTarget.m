@@ -1,4 +1,4 @@
-function Info = RunTypiTarget(name, flavor)
+% function Info = RunTypiTarget(name, flavor)
 % Oddball/Three Stimulus + Memory task Paradigm
 % main script for testing 
 % 
@@ -8,23 +8,23 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = '';
-
+name = 'test';
+flavor = 'full';
 %% ---------------------------------------------------------------------
 % Check if inputs are correct..
 % ---------------------------------------------------------------------
-if nargin ~= 2
-    warning('You need to specify two input arguments: name and flavor.')
-    warning('Quitting now.')
-    return
-else
-    allowed_flavors = {'training', 'typitarget'};
-    if ~ismember(flavor, allowed_flavors)
-    warning('Flavor can be "training" or "typitarget".')
-    warning('Quitting now.')
-    return
-    end
-end
+% if nargin ~= 2
+%     warning('You need to specify two input arguments: name and flavor.')
+%     warning('Quitting now.')
+%     return
+% else
+%     allowed_flavors = {'training', 'typitarget'};
+%     if ~ismember(flavor, allowed_flavors)
+%     warning('Flavor can be "training" or "typitarget".')
+%     warning('Quitting now.')
+%     return
+%     end
+% end
 
 
 %% ---------------------------------------------------------------------
@@ -40,19 +40,6 @@ rng("shuffle");
 
 
 %% --------------------------------------------------------------------
-% Run either test or full experiment by determining flavour
-% ---------------------------------------------------------------------
-
-switch flavor
-    case 'training'
-        Info.T_fin = MakeTrainingSequence(P);
-        
-    otherwise
-        Info.T_fin = MakeTrialSequence(P);
-end
-
-
-%% --------------------------------------------------------------------
 % Initiate file names and load Parameters.
 % ---------------------------------------------------------------------
 P.Flavor = flavor;
@@ -61,9 +48,21 @@ P.Flavor = flavor;
 
 Info                   = struct;
 Info.name              = name;
-Info.Logfilename       = ['Logfiles' filesep 'TypT' name '_logfile.mat'];
+Info.Logfilename       = ['Logfiles' filesep 'TypT_' name '_logfile.mat'];
 Info.DateTime          = {datestr(clock)};
 Info.P                 = P;
+
+%% --------------------------------------------------------------------
+% Run either test or full experiment by determining flavour
+% ---------------------------------------------------------------------
+
+switch flavor
+    case 'training'
+        Info.T_fin = MakeTrainingSequence(P);
+        
+    case 'full'
+        Info.T_fin = MakeTrialSequence(P);
+end
 
 %% --------------------------------------------------------------------
 % Define trials
@@ -71,7 +70,7 @@ Info.P                 = P;
 switch flavor
     case 'training'
         [Info.T_fin] = MakeTrainingSequence(P);
-    otherwise
+    case 'full'
         [Info.T_fin] = MakeTrialSequence(P);
 end
 
@@ -94,15 +93,15 @@ P.FrDuration   = (Screen( window, 'GetFlipInterval')); % in ms
 %% ------------------------------------------------------------------------
 % Define the background for the memory task of this experiment
 % ------------------------------------------------------------------------
-global DefaultMemScreen
-DefaultMemScreen = Screen('OpenOffscreenWindow', window, P.BgColor);
-tw = RectWidth(Screen('TextBounds',  window, P.mem_cueText));
-th = RectHeight(Screen('TextBounds', window, P.mem_cueText));
-Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueCertainOld}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
-Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueOld}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
-Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueCertainNew}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
-Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueNew}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset ,P.mem_cueColor);
-my_fixationpoint(DefaultMemScreen, P.CenterX, P.CenterY, 5, [100 100 100]);
+global DefaultScreen
+DefaultScreen = Screen('OpenOffscreenWindow', window, P.BgColor);
+% tw = RectWidth(Screen('TextBounds',  window, P.mem_cueText));
+% th = RectHeight(Screen('TextBounds', window, P.mem_cueText));
+% Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueCertainOld}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+% Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueOld}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+% Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueCertainNew}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+% Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueNew}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset ,P.mem_cueColor);
+my_fixationpoint(DefaultScreen, P.CenterX, P.CenterY, 5, [100 100 100]);
 
 %% --------------------------------------------------------------------
 % Run across trials.
@@ -115,8 +114,9 @@ tic;
 
 
 % ----- Loop over trials -----
-% isQuit = false;
-for itrial = 1:length(T_fin)
+isQuit = false;
+
+for itrial = 1:length(Info.T_fin)
     
     % Run the trial.
     [Info, isQuit] = OneTrial(itrial);
@@ -128,8 +128,8 @@ for itrial = 1:length(T_fin)
 
     % Update Info structure.
     Info.T_fin(itrial).TrialCompleted = 1;
-    Info.T_fin(itrial).ImgDur = P.ImgDuration;
-    Info.ntrials = t;
+    Info.T_fin(itrial).ImgDur = P.ImgDur;
+    Info.ntrials = itrial;
     Info.tTotal  = toc;
     Info.tFinish = {datestr(clock)};
     

@@ -71,7 +71,7 @@ def crop_center_square(img):
 #output_image = crop_to_512("C:/Users/User/MATLAB/TypiTarget/stimuli_nontarget/pexels-arina-krasnikova-6653896.jpg", "output2.jpg")
 #output_image.show()
 
-path = "C:/Users/User/MATLAB/TypiTarget/stimuli_target/"
+path = "C:/Users/User/MATLAB/TypiTarget/stimuli_nontarget/"
 dir_resize = '"C:/Users/User/MATLAB/TypiTarget/stimuli_nontarget/resized_images/'
 list_imageFiles = []
 imageFil = []
@@ -79,14 +79,15 @@ imageFil = []
 for file in os.listdir(path):
     if file.endswith('.jpg'):
         list_imageFiles.append(file)
-        # os.path.splitext(infile)
-        # file_name_with_extension = os.path.basename(file)
-        # file_name, _ = os.path.splitext(file_name_with_extension)
+        os.path.splitext(file)
+        file_name_with_extension = os.path.basename(file)
+        file_name, _ = os.path.splitext(file_name_with_extension)
+        imageFil.append(file_name)
         # imageFil.append(file_name)
         with Image.open(path+file, "r") as img:
             cropped = crop_center_square(img)
             # Resize to 512x512
             resized = cropped.resize((512, 512), Image.LANCZOS)
             
-            resized.save(file + '_resized.jpg') #, 'JPEG')
+            resized.save(file_name + '_resized.jpg') #, 'JPEG')
                 

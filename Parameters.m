@@ -101,15 +101,6 @@ P.mem_responseText = {'[sicher alt]', '[eher alt]', '[eher neu]', '[sicher neu]'
 
 %P.mem_location
 
-%% -----------------------------------------------------------------------
-% Parameters of the procedure
-%  -----------------------------------------------------------------------
-P.BreakAfternTrials = (P.n_typ + P.n_untyp + P.n_target + P.n_nontarget)*2 - (P.n_target + P.n_nontarget);
-
-
-% Timing parameters.
-P.ImgDur  = 0.700;
-P.ISI_Dur = 1.500;
 
 %% -----------------------------------------------------------------------
 % Images
@@ -121,15 +112,15 @@ P.prop_nontarget = 0.1;
 
 switch P.Flavor
     case 'training'
-        P.scene_categories = {''};
+        P.scene_categories = {'standard'};
         P.nblocks_per_category = 1;
         P.n_trials_per_block = 20;
 
-        P.stim_140       = 'stimuli_training.xlsx';
+        P.stim_140       = 'stimuli_training_standard.xlsx';
         P.stim_target    = 'stimuli_training_target.xlsx';
         P.stim_nontarget = 'stimuli_training_nontarget.xlsx';
 
-        P.n_standard  = ceil((P.prop_typ + P.prop_untyp) * P.ntrial_per_block);
+        P.n_standard  = ceil((P.prop_typ + P.prop_untyp) * P.n_trials_per_block);
         P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
         P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
 
@@ -148,8 +139,17 @@ switch P.Flavor
         P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
         P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
 
-
 end
+
+%% -----------------------------------------------------------------------
+% Parameters of the procedure
+%  -----------------------------------------------------------------------
+P.BreakAfternTrials = (P.n_typ + P.n_untyp + P.n_target + P.n_nontarget)*2 - (P.n_target + P.n_nontarget);
+
+
+% Timing parameters.
+P.ImgDur  = 0.700;
+P.ISI_Dur = 1.500;
 
 
 

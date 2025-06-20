@@ -1,12 +1,33 @@
-function [Info] = OneTrial(itrial)
+function [Info, isQuit] = OneTrial(itrial)
 
-global window Info P DefaultMemScreen;
+global window Info P DefaultScreen;
 % ----------------------------------------------------------------------
 % Present pause a regular intervals and when a new block starts.
 % ----------------------------------------------------------------------
 if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
     PresentPause(window, P, Info, itrial)
 end 
+
+% ----------------------------------------------------------------------
+% Display trial info on experimenter's screen.
+% ----------------------------------------------------------------------
+switch P.Flavor
+    case 'training'
+        fprintf('Training session. Trial %d of %d. Presentation %d of %d. ', itrial, length(Info.T_fin));
+        
+    case 'full'     
+        fprintf('Full experiment. Trial %d of %d. Presentation %d of %d. ', itrial, length(Info.T_fin));
+            
+end
+
+% ----------------------------------------------------------------------
+% Wait until subject presses both buttons.
+% ----------------------------------------------------------------------
+isQuit = WaitUntilBothButtonsArePressed(P);
+if isQuit
+    return
+end
+
 
 % ----------------------------------------------------------------------
 % Fixation cross and random-length inter-stimulus interval 
@@ -42,9 +63,9 @@ ImgTex     = Screen('MakeTexture', window, Img);
 % Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
 % [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
 
-Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
+% Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
 if strcmp(Info.T_fin(itrial).task, 'oddball')
-    Screen('DrawTexture', window);
+    Screen('DrawTexture', window, DefaultScreen);
     Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
     [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
 
@@ -53,7 +74,7 @@ if strcmp(Info.T_fin(itrial).task, 'oddball')
     Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
 
 else
-    Screen('DrawTexture', window, DefaultMemScreen);
+    Screen('DrawTexture', window, DefaultScreen);
     Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
     [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
 
@@ -67,79 +88,86 @@ end
 % Evaluate response. 
 % ----------------------------------------------------------------------
 if strcmp(Info.T_fin(itrial).task,'oddball')
-    [Info.T_fin(itrial).Report, rt_time] = GetResponse_Cat(Info.T_fin(itrial).img_dur, Info.T_fin(itrial).category)
+    [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(Info.T_fin(itrial).img_dur);
+
+    % Response time
+    Info.T_fin(itrial).RT = rt_time - tImageOn;
+    
+    % Oddball task
+    % did the subject detect the target?
+    if Info.T_fin(itrial).Report==99
+        isQuit = true;
+    
+    elseif Info.T_fin(itrial).Report==1
+        isQuit = false;
+        Info.T_fin(itrial).odd_resp = 1;
+    elseif Info.T_fin(itrial).Report==0
+        isQuit = false;
+        Info.T_fin(itrial).odd_resp = 0;
+    
+    end
+
 elseif strcmp(Info.T_fin(itrial).task, 'memory')
-    [Info.T_fin(itrial).Report, rt_time] = GetResponse_Mem(P)
+    [Info.T_fin(itrial).Report, rt_time] = GetResponse_Mem(P);
+
+    % Response time
+    Info.T_fin(itrial).RT = rt_time - tImageOn;
+
+    % Memory task
+    % did the subject say "(rather)/old" or "(rather)/new"?
+    if Info.T_fin(itrial).Report==99
+        isQuit = true;
+    
+    elseif Info.T_fin(itrial).Report == 1 || Info.T_fin(itrial).Report == 2 || ...
+           Info.T_fin(itrial).Report == 3 || Info.T_fin(itrial).Report == 4
+        isQuit = false;
+    
+        if Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'old')
+            Info.T_fin(itrial).mem_resp = 1;
+        elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'old')
+            Info.T_fin(itrial).mem_resp = 1;
+        elseif Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'new')
+            Info.T_fin(itrial).mem_resp = 0;
+        elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'new')
+            Info.T_fin(itrial).mem_resp = 0;
+        elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'old')
+            Info.T_fin(itrial).mem_resp = 0;
+        elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'old')
+            Info.T_fin(itrial).mem_resp = 0;
+        elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'new')
+            Info.T_fin(itrial).mem_resp = 1;
+        elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'new')
+            Info.T_fin(itrial).mem_resp = 1;
+    
+        end
+       
+    
+    end
+    
+    % And was this correct or wrong?
+    isOld = strcmp(Info.T_fin(itrial).cond, 'old');
+    
+    if isOld & Info.T_fin(itrial).ReportOld==1
+        Info.T_fin(itrial).mem_response = 1;
+        fprintf('Correct.\n');
+    elseif isOld & Info.T_fin(itrial).ReportOld==0
+        Info.T_fin(itrial).mem_response = 0;
+        fprintf('Error.\n');
+    elseif ~isOld & Info.T_fin(itrial).ReportOld==1
+        Info.T_fin(itrial).mem_response = 0;
+        fprintf('Error.\n');
+    elseif ~isOld & Info.T_fin(itrial).ReportOld==0
+        Info.T_fin(itrial).mem_response = 1;
+        fprintf('Correct.\n');
+    end
+
     Screen('Close', ImgTex); 
 end
 
-% Response time
-Info.T_fin(itrial).RT = rt_time - tImageOn;
 
-% Oddball task
-%if/while
-% did the subject detect the target?
-if Info.T_fin(itrial).Report==99
-    isQuit = true;
-
-elseif Info.T_fin(itrial).Report==1
-    isQuit = false;
-    Info.T_fin(itrial).odd_resp = 1;
-elseif Info.T_fin(itrial).Report==0
-    isQuit = false;
-    Info.T_fin(itrial).odd_resp = 0;
-
-end
 % 
 
 
-% Memory task
-% did the subject say "(rather)/old" or "(rather)/new"?
-if Info.T_fin(itrial).Report==99
-    isQuit = true;
-
-elseif Info.T_fin(itrial).Report == 1 | Info.T_fin(itrial).Report == 2 | ...
-       Info.T_fin(itrial).Report == 3 | Info.T_fin(itrial).Report == 4
-    isQuit = false;
-
-    if Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'old')
-        Info.T_fin(itrial).mem_resp = 1;
-    elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'old')
-        Info.T_fin(itrial).mem_resp = 1;
-    elseif Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'new')
-        Info.T_fin(itrial).mem_resp = 0;
-    elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'new')
-        Info.T_fin(itrial).mem_resp = 0;
-    elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'old')
-        Info.T_fin(itrial).mem_resp = 0;
-    elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'old')
-        Info.T_fin(itrial).mem_resp = 0;
-    elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'new')
-        Info.T_fin(itrial).mem_resp = 1;
-    elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'new')
-        Info.T_fin(itrial).mem_resp = 1;
-
-    end
-   
-
-end
-
-% And was this correct or wrong?
-isOld = strcmp(Info.T(itrial).cond, 'old');
-
-if isOld & Info.T(t).ReportOld==1
-    Info.T(t).mem_response = 1;
-    fprintf('Correct.\n');
-elseif isOld & Info.T(t).ReportOld==0
-    Info.T(t).mem_response = 0;
-    fprintf('Error.\n');
-elseif ~isOld & Info.T(t).ReportOld==1
-    Info.T(t).mem_response = 0;
-    fprintf('Error.\n');
-elseif ~isOld & Info.T(t).ReportOld==0
-    Info.T(t).mem_response = 1;
-    fprintf('Correct.\n');
-end
 
 % ----------------------------------------------------------------------
 % Present Feedback. 
