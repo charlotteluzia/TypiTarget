@@ -1,4 +1,4 @@
-function [Report, secs] = GetResponse_Mem(P, timeout)
+function [Report, secs] = GetResponse_Mem(P)
 
 % timeout determines when to stop polling for responses. 
 % timeout gives a value in seconds from NOW.
@@ -6,18 +6,18 @@ function [Report, secs] = GetResponse_Mem(P, timeout)
 
 secs = 0;
 now = GetSecs;
-Report = [];
+Report = 0;
 isQuit = 0;
 
 
-if timeout==0
-    stop = inf;% no time out, wait forever
-else
-    stop = now + timeout;
-end
+% if timeout==0
+%     stop = inf;% no time out, wait forever
+% else
+%     stop = now + timeout;
+% end
 
 
-while GetSecs < stop
+while Report == 0  % GetSecs < stop
 % while Report==0
     [keyIsDown,secs,keyCode] = KbCheck;
     if keyIsDown
@@ -27,10 +27,10 @@ while GetSecs < stop
         elseif keyCode (P.OldKey)
             Report = 2;
             return
-        elseif keyCode (P.CertainNewKey)
+        elseif keyCode (P.NewKey)
             Report = 3;
             return
-        elseif keyCode(P.NewKey)
+        elseif keyCode(P.CertainNewKey)
             Report = 4;
             return
         elseif keyCode(P.Quitkey)

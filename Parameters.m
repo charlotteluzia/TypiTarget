@@ -77,7 +77,7 @@ P.mem_cueCertainNew = {'[sicher neu]'};
 KbName('UnifyKeyNames');    
 P.Quitkey = KbName('ESCAPE');
 
-P.YesKey  = KbName('j');
+P.YesKey  = KbName('space');
 
 P.CertainOldKey = KbName('d');
 P.OldKey = KbName('f');

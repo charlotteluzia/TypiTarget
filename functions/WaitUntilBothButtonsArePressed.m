@@ -5,7 +5,7 @@ stop = inf;% no time out, wait forever
 while GetSecs < stop
     [keyIsDown,secs,keyCode] = KbCheck;
     if keyIsDown
-        if keyCode(P.OldKey)==1 & keyCode(P.NewKey)==1
+        if keyCode(P.YesKey)==1
             isQuit = 0;
             return
         elseif keyCode(P.Quitkey)

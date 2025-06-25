@@ -9,7 +9,7 @@ WaitSecs(0.5);
 %% Present the pause.
 Screen('DrawTexture', window, DefaultScreen);
 
-pausetext = ['Halten Sie beide Tasten gedrückt, um \n mit Durchgang ' num2str(t) ' von ' num2str(length(Info.T_fin)) ' fortzufahren'];
+pausetext = ['Drücken Sie die Leertaste, um \n mit Durchgang ' num2str(t) ' von ' num2str(length(Info.T_fin)) ' fortzufahren'];
 Screen(window,'TextSize',24);
 tw = RectWidth(Screen('TextBounds', window, pausetext));
 th = RectHeight(Screen('TextBounds', window, pausetext));
