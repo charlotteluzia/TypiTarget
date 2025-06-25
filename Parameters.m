@@ -60,15 +60,15 @@ P.degperpix = mean(P.degperpix);
 P.BgColor    = [192 192 192]; % 0 * 255;
 P.TextColor  = [100 100 100];
 P.StuffColor = [50 50 50]; % Color for everything on the display except targets, e.g. fixation mark.
-P.mem_cueColor = [180 180 180];
+P.mem_cueColor = [98 101 103]; %[180 180 180];
 
 % Present instructional cues in the lower corners.
 P.cueXoffset = 300;
 P.cueYoffset = 100;
-P.mem_cueCertainOld = {'[sicher alt]'};
-P.mem_cueOld        = {'[eher alt]'};
-P.mem_cueNew        = {'[eher neu]'};
-P.mem_cueCertainNew = {'[sicher neu]'};
+P.mem_cueCertainOld = ['sicher alt'];
+P.mem_cueOld        = ['eher alt'];
+P.mem_cueNew        = ['eher neu'];
+P.mem_cueCertainNew = ['sicher neu'];
 
 
 %% -----------------------------------------------------------------------
@@ -96,7 +96,7 @@ P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
 
 
 P.mem_cues = {'[d]', '[f]', '[j]', '[k]'};
-P.mem_responseText = {'[sicher alt]', '[eher alt]', '[eher neu]', '[sicher neu]'};
+P.mem_responseText = ['[sicher alt]', '[sicher neu]']; % , '[eher alt]', '[eher neu]'
 % P.mem_responseText = {'[certainly old]', '[rather old]', '[rather new]', '[certainly new]'};
 
 %P.mem_location
@@ -124,6 +124,9 @@ switch P.Flavor
         P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
         P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
 
+        P.BreakAfternTrials = (P.n_standard + P.n_target + P.n_nontarget)*2 - (P.n_target + P.n_nontarget);
+
+
 
     otherwise
         P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'};
@@ -139,16 +142,18 @@ switch P.Flavor
         P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
         P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
 
+        P.BreakAfternTrials = (P.n_typ + P.n_untyp + P.n_target + P.n_nontarget)*2 - (P.n_target + P.n_nontarget);
+
+
 end
 
 %% -----------------------------------------------------------------------
 % Parameters of the procedure
 %  -----------------------------------------------------------------------
-P.BreakAfternTrials = (P.n_typ + P.n_untyp + P.n_target + P.n_nontarget)*2 - (P.n_target + P.n_nontarget);
 
 
 % Timing parameters.
-P.ImgDur  = 0.700;
+P.ImgDur  = 1.500;
 P.ISI_Dur = 1.500;
 
 

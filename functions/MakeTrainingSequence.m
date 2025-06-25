@@ -1,4 +1,4 @@
-%function [T_fin] = MakeTrainingSequence(P)
+function [T_fin] = MakeTrainingSequence(P)
 %%
 % read excel files with image name and category
 % in case of indoor scene stimuli (bedroom/living room/kitchen) additional
@@ -31,12 +31,13 @@ stim_nontargets     = struct('info', stim_nontargets);
 %%
 T = struct();
 
-idx_standard   = find(strcmp([stim_training_idx.category], 'standard'))
-idx_targets    = find(strcmp([stim_targets_idx.category], 'target'));
-idx_nontargets = find(strcmp([stim_nontargets_idx.category], 'nontarget'));
-
-%idx_targets    = find(strcmp([stim_targets_new.info.category], 'target'));
-%idx_nontargets = find(strcmp([stim_nontargets.category], 'nontarget'));
+% idx_standard   = find(strcmp([stim_training_idx.category], 'standard'));
+% idx_targets    = find(strcmp([stim_targets_idx.category], 'target'));
+% idx_nontargets = find(strcmp([stim_nontargets_idx.category], 'nontarget'));
+% 
+idx_standard   = find(strcmp({stim_training.info.category}, 'standard'));
+idx_targets    = find(strcmp({stim_targets.info.category}, 'target'));
+idx_nontargets = find(strcmp({stim_nontargets.info.category}, 'nontarget'));
 
 
 itrial = 0;
@@ -44,8 +45,9 @@ block_cat_total = 1;
 
 for icat = 1:length(P.scene_categories)
 
-    % idx_typ   = find([stim_select(icat).info.p_typicality]  > typicality_median(icat));
-    % idx_untyp = find([stim_select(icat).info.p_typicality] <= typicality_median(icat));
+    % idx_standard   = find(strcmp([stim_training.info.category], 'standard'));
+    % idx_targets    = find(strcmp([stim_targets.info.category], 'target'));
+    % idx_nontargets = find(strcmp([stim_nontargets.info.category], 'nontarget'));
 
 
     for i_cat_block = 1:P.nblocks_per_category
@@ -91,23 +93,14 @@ M = struct();
 itrial = 0;
 block_mem_total = 1;
 
+idx_standard_mem   = find(strcmp({stim_available.info.category}, 'standard'));
+
 for imem = 1:length(P.scene_categories)
-
-    % is it ok to calculate new median at this stage? or should median be
-    % same for all available images out of dataset, not just for available
-    % images after "using" some
-    idx_typ   = find([stim_available(imem).info.p_typicality]  > typicality_median(imem));
-    idx_untyp = find([stim_available(imem).info.p_typicality] <= typicality_median(imem));
-
-
 
     for i_mem_block = 1:P.nblocks_per_category
 
-        % Select typical images.
-        [itrial, M, idx_typ, block_mem_total]   = get_images_mem(itrial, M, stim_available(imem), idx_typ, i_mem_block, block_mem_total, P.n_typ);
-
-        % Select untypical images.
-        [itrial, M, idx_untyp, block_mem_total] = get_images_mem(itrial, M, stim_available(imem), idx_untyp, i_mem_block, block_mem_total, P.n_untyp);
+        % Select standard images.
+        [itrial, M, idx_standard, block_mem_total]   = get_images_mem(itrial, M, stim_available, idx_standard_mem, i_mem_block, block_mem_total, P.n_standard);
 
         block_mem_total = block_mem_total + 1;
        
@@ -263,4 +256,4 @@ for i = 1:length(randOrder)
 end
 
 
-%%end
+end

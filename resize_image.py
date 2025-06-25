@@ -71,7 +71,7 @@ def crop_center_square(img):
 #output_image = crop_to_512("C:/Users/User/MATLAB/TypiTarget/stimuli_nontarget/pexels-arina-krasnikova-6653896.jpg", "output2.jpg")
 #output_image.show()
 
-path = "C:/Users/User/MATLAB/TypiTarget/stimuli_nontarget/"
+path = "C:/Users/User/MATLAB/TypiTarget/stimuli_training/restaurant_original/"
 dir_resize = '"C:/Users/User/MATLAB/TypiTarget/stimuli_nontarget/resized_images/'
 list_imageFiles = []
 imageFil = []

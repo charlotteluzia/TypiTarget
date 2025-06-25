@@ -23,10 +23,10 @@ end
 % ----------------------------------------------------------------------
 % Wait until subject presses both buttons.
 % ----------------------------------------------------------------------
-isQuit = WaitUntilBothButtonsArePressed(P);
-if isQuit
-    return
-end
+% isQuit = WaitUntilBothButtonsArePressed(P);
+% if isQuit
+%     return
+% end
 
 
 % ----------------------------------------------------------------------
@@ -66,7 +66,7 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
 % [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
 
 % Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
-    if strcmp(Info.T_fin(itrial).task, 'memory')
+    if strcmp(Info.T_fin(itrial).task, 'oddball')
         Screen('DrawTexture', window, DefaultScreen);
         Screen('DrawTexture', window, ImgTex, [], Pos);
         [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
@@ -96,7 +96,7 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
         
         end
     
-    elseif strcmp(Info.T_fin(itrial).task, 'oddball')
+    elseif strcmp(Info.T_fin(itrial).task, 'memory')
     
         Screen('DrawTexture', window, DefaultScreen);
         Screen('DrawTexture', window, ImgTex, [], Pos);
@@ -105,8 +105,8 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
         Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
     
         [Info.T_fin(itrial).Report, rt_time] = GetResponse_Mem(P);
-        % Screen('DrawTexture', window, DefaultScreen);
-        % [VBLTimestamp, t_imageoffset] = Screen('Flip', window);
+        Screen('DrawTexture', window, DefaultScreen);
+        Screen('Flip', window); % [VBLTimestamp, t_imageoffset] = 
     
         Screen('Close', ImgTex);
     
@@ -142,19 +142,9 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
             end
            
         end
-    
-    end
 
-
-
-
-
-% ----------------------------------------------------------------------
-% Evaluate response. 
-% ----------------------------------------------------------------------
-  
-% And was this correct or wrong?
-isOld = strcmp(Info.T_fin(itrial).cond, 'old');
+    % And was this correct or wrong?
+    isOld = strcmp(Info.T_fin(itrial).cond, 'old');
     
     if isOld & Info.T_fin(itrial).mem_resp==1
         Info.T_fin(itrial).mem_response = 1;
@@ -170,6 +160,18 @@ isOld = strcmp(Info.T_fin(itrial).cond, 'old');
         fprintf('Correct.\n');
     end
     
+    end
+
+
+
+
+
+% ----------------------------------------------------------------------
+% Evaluate response. 
+% ----------------------------------------------------------------------
+  
+
+    
 
 
 % ----------------------------------------------------------------------
@@ -177,9 +179,9 @@ isOld = strcmp(Info.T_fin(itrial).cond, 'old');
 % ----------------------------------------------------------------------
 if P.doFeedback
     Screen('DrawTexture', window, DefaultScreen);
-    if Info.T(t).mem_response==1
+    if Info.T_fin(itrial).mem_response==1
         my_fixationpoint(window, P.CenterX, P.CenterY, 5, [0 200 0])
-    elseif Info.T(t).mem_response==0
+    elseif Info.T_fin(itrial).mem_response==0
         my_fixationpoint(window, P.CenterX, P.CenterY, 5, [200 0 0])
     else
         my_fixationpoint(window, P.CenterX, P.CenterY, 15, [200 200 0])

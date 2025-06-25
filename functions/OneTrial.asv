@@ -105,8 +105,8 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
         Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
     
         [Info.T_fin(itrial).Report, rt_time] = GetResponse_Mem(P);
-        % Screen('DrawTexture', window, DefaultScreen);
-        % [VBLTimestamp, t_imageoffset] = Screen('Flip', window);
+        Screen('DrawTexture', window, DefaultScreen);
+        [VBLTimestamp, t_imageoffset] = Screen('Flip', window, tImageOn + rt_time);
     
         Screen('Close', ImgTex);
     
@@ -145,8 +145,8 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
     
     end
 
-    trial_nr = trial_nr + 1;
-end 
+
+
 
 
 % ----------------------------------------------------------------------
@@ -177,9 +177,9 @@ isOld = strcmp(Info.T_fin(itrial).cond, 'old');
 % ----------------------------------------------------------------------
 if P.doFeedback
     Screen('DrawTexture', window, DefaultScreen);
-    if Info.T(t).mem_response==1
+    if Info.T_fin(itrial).mem_response==1
         my_fixationpoint(window, P.CenterX, P.CenterY, 5, [0 200 0])
-    elseif Info.T(t).mem_response==0
+    elseif Info.T_fin(itrial).mem_response==0
         my_fixationpoint(window, P.CenterX, P.CenterY, 5, [200 0 0])
     else
         my_fixationpoint(window, P.CenterX, P.CenterY, 15, [200 200 0])

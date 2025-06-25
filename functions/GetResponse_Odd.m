@@ -11,13 +11,11 @@ now = GetSecs;
 Report = NaN;
 isQuit = 0;
 
-% if timeout==0
-%     stop = 2000;
-% else
-%     stop = now + timeout;
-% end
+timeout=3.000;
+stop = now + timeout;
 
-while 3+2==5
+
+while GetSecs < stop
 % while Report==0
     [keyIsDown,secs,keyCode] = KbCheck;
     if keyIsDown
