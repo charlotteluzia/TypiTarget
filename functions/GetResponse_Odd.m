@@ -6,7 +6,7 @@ function [ Report, secs ] = GetResponse_Odd(toffset)
 
 global window Info P DefaultScreen;
 
-secs = 0;
+secs = NaN;
 now = GetSecs;
 Report = NaN;
 isQuit = 0;

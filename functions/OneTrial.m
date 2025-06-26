@@ -13,20 +13,12 @@ end
 % ----------------------------------------------------------------------
 switch P.Flavor
     case 'training'
-        fprintf('Training session. Trial %d of %d. Presentation %d of %d. ', itrial, length(Info.T_fin));
+        fprintf('Training session. Trial %d of %d. \n\n', itrial, length(Info.T_fin));
         
     case 'full'     
-        fprintf('Full experiment. Trial %d of %d. Presentation %d of %d. ', itrial, length(Info.T_fin));
+        fprintf('Full experiment. Trial %d of %d.', itrial, length(Info.T_fin));
             
 end
-
-% ----------------------------------------------------------------------
-% Wait until subject presses both buttons.
-% ----------------------------------------------------------------------
-% isQuit = WaitUntilBothButtonsArePressed(P);
-% if isQuit
-%     return
-% end
 
 
 % ----------------------------------------------------------------------
@@ -69,19 +61,19 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
     if strcmp(Info.T_fin(itrial).task, 'oddball')
         Screen('DrawTexture', window, DefaultScreen);
         Screen('DrawTexture', window, ImgTex, [], Pos);
-        [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
+        [tImageOn] = Screen('Flip', window, tISIon + P.ISI_Dur); % Info.T_fin(itrial).ISI);
     
         Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
     
-        Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
+        % Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
     
-        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(Info.T_fin(itrial).img_dur);
+        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(tImageOn+P.ImgDur);
     
         Screen('Close', ImgTex);
     
         % Response time
         Info.T_fin(itrial).RT = rt_time - tImageOn;
-        
+        Info.T_fin(itrial).target_resp = NaN;
         % Oddball task
         % did the subject detect the target?
         if Info.T_fin(itrial).Report==99
@@ -89,10 +81,10 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
         
         elseif Info.T_fin(itrial).Report==1
             isQuit = false;
-            Info.T_fin(itrial).odd_resp = 1;
+            Info.T_fin(itrial).target_resp = 1;
         elseif Info.T_fin(itrial).Report==0
             isQuit = false;
-            Info.T_fin(itrial).odd_resp = 0;
+            Info.T_fin(itrial).target_resp = 0;
         
         end
     
@@ -161,17 +153,6 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
     end
     
     end
-
-
-
-
-
-% ----------------------------------------------------------------------
-% Evaluate response. 
-% ----------------------------------------------------------------------
-  
-
-    
 
 
 % ----------------------------------------------------------------------

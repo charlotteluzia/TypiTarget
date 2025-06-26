@@ -8,7 +8,7 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = 'test';
+name = 'test2';
 flavor = 'full';
 %% ---------------------------------------------------------------------
 % Check if inputs are correct..
@@ -95,11 +95,11 @@ P.FrDuration   = (Screen( window, 'GetFlipInterval')); % in ms
 % ------------------------------------------------------------------------
 global DefaultScreen
 DefaultScreen = Screen('OpenOffscreenWindow', window, P.BgColor);
-tw = RectWidth(Screen('TextBounds',  window, P.mem_responseText));
-th = RectHeight(Screen('TextBounds', window, P.mem_responseText));
-Screen(DefaultScreen, 'DrawText', P.mem_responseText, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+% tw = RectWidth(Screen('TextBounds',  window, P.mem_responseText));
+% th = RectHeight(Screen('TextBounds', window, P.mem_responseText));
+% Screen(DefaultScreen, 'DrawText', P.mem_responseText, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
 % Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueOld}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
-Screen(DefaultScreen, 'DrawText', P.mem_responseText, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+% Screen(DefaultScreen, 'DrawText', P.mem_responseText, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
 % Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueNew}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset ,P.mem_cueColor);
 my_fixationpoint(DefaultScreen, P.CenterX, P.CenterY, 5, [100 100 100]);
 

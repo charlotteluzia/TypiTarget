@@ -13,18 +13,18 @@ P.doSkipSyncTest = 1; % if==1: no synctest and normal priority (this is for test
 %  -----------------------------------------------------------------------
 P.thismachine = get_machine;
 
-if strcmpi(P.thismachine, '') % EEG testing room
+if strcmpi(P.thismachine, '') % behavioral lab
     P.PresentScreen = 2;
     P.myWidth       = 1280;
     P.myHeight      = 1024;
     P.myRate        = 100;
-    P.ImagePath     = 'C:\Dokumente und Einstellungen\matlab\Eigene Dateien\Charlotte\TypiTarget\stimuli\';  
+    P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';
             
     
 else        
     switch P.thismachine
         case 'DESKTOP-KPH292U'
-            P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';             
+            P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';            
             P.PresentScreen = 2;
             P.myWidth       = 1920;
             P.myHeight      = 1080;
@@ -105,10 +105,10 @@ P.mem_responseText = ['[sicher alt]', '[sicher neu]']; % , '[eher alt]', '[eher 
 %% -----------------------------------------------------------------------
 % Images
 %  -----------------------------------------------------------------------
-P.prop_typ = 0.6;  % proportion of typical images of 100 trials
+P.prop_typ = 0.4;  % proportion of typical images of 100 trials
 P.prop_untyp = 0.2;
-P.prop_target = 0.1;
-P.prop_nontarget = 0.1;
+P.prop_target = 0.2;
+P.prop_nontarget = 0.2;
 
 switch P.Flavor
     case 'training'
@@ -142,7 +142,7 @@ switch P.Flavor
         P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
         P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
 
-        P.BreakAfternTrials = (P.n_typ + P.n_untyp + P.n_target + P.n_nontarget)*2 - (P.n_target + P.n_nontarget);
+        P.BreakAfternTrials = (P.n_typ + P.n_untyp)*3 + (P.n_target + P.n_nontarget);
 
 
 end
@@ -153,7 +153,7 @@ end
 
 
 % Timing parameters.
-P.ImgDur  = 1.500;
+P.ImgDur  = 0.700;
 P.ISI_Dur = 1.500;
 
 
