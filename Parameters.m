@@ -25,7 +25,7 @@ else
     switch P.thismachine
         case 'DESKTOP-KPH292U'
             P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';            
-            P.PresentScreen = 2;
+            P.PresentScreen = 0;
             P.myWidth       = 1920;
             P.myHeight      = 1080;
             P.myRate        = 60;

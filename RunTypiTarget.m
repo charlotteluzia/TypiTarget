@@ -8,7 +8,7 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = 'test2';
+name = 'test3';
 flavor = 'full';
 %% ---------------------------------------------------------------------
 % Check if inputs are correct..

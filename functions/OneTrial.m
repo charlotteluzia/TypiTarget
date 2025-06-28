@@ -13,10 +13,10 @@ end
 % ----------------------------------------------------------------------
 switch P.Flavor
     case 'training'
-        fprintf('Training session. Trial %d of %d. \n\n', itrial, length(Info.T_fin));
+        fprintf('Training session. Trial %d of %d. \n\', itrial, length(Info.T_fin));
         
     case 'full'     
-        fprintf('Full experiment. Trial %d of %d.', itrial, length(Info.T_fin));
+        fprintf('Full experiment. Trial %d of %d. \n', itrial, length(Info.T_fin));
             
 end
 
@@ -113,44 +113,62 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
         elseif Info.T_fin(itrial).Report == 1 || Info.T_fin(itrial).Report == 2 || ...
                Info.T_fin(itrial).Report == 3 || Info.T_fin(itrial).Report == 4
             isQuit = false;
+
+            if Info.T_fin(itrial).Report == 1
+                Info.T_fin(itrial).mem_response = 1;
+            elseif Info.T_fin(itrial).Report == 2
+                Info.T_fin(itrial).mem_response = 2;
+            elseif Info.T_fin(itrial).Report == 3
+                Info.T_fin(itrial).mem_response = 3;
+            elseif Info.T_fin(itrial).Report == 4
+                Info.T_fin(itrial).mem_response = 4;
+            end
         
             if Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'old')
-                Info.T_fin(itrial).mem_resp = 1;
+                Info.T_fin(itrial).mem_perform = 'hit';
+                fprintf('Hit.\n');
             elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'old')
-                Info.T_fin(itrial).mem_resp = 1;
+                Info.T_fin(itrial).mem_perform = 'hit';
+                fprintf('Hit.\n');
             elseif Info.T_fin(itrial).Report == 1 & strcmp(Info.T_fin(itrial).cond, 'new')
-                Info.T_fin(itrial).mem_resp = 0;
+                Info.T_fin(itrial).mem_perform = 'fa';
+                fprintf('False Alarm.\n');
             elseif Info.T_fin(itrial).Report == 2 & strcmp(Info.T_fin(itrial).cond, 'new')
-                Info.T_fin(itrial).mem_resp = 0;
+                Info.T_fin(itrial).mem_perform = 'fa';
+                fprintf('False Alarm.\n');
             elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'old')
-                Info.T_fin(itrial).mem_resp = 0;
+                Info.T_fin(itrial).mem_perform = 'miss';
+                fprintf('Miss.\n');
             elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'old')
-                Info.T_fin(itrial).mem_resp = 0;
+                Info.T_fin(itrial).mem_perform = 'miss';
+                fprintf('Miss.\n');
             elseif Info.T_fin(itrial).Report == 3 & strcmp(Info.T_fin(itrial).cond, 'new')
-                Info.T_fin(itrial).mem_resp = 1;
+                Info.T_fin(itrial).mem_perform = 'cr';
+                fprintf('Correct Rejection.\n');
             elseif Info.T_fin(itrial).Report == 4 & strcmp(Info.T_fin(itrial).cond, 'new')
-                Info.T_fin(itrial).mem_resp = 1;
+                Info.T_fin(itrial).mem_perform = 'cr';
+                fprintf('Correct Rejection.\n');
         
             end
            
         end
 
     % And was this correct or wrong?
-    isOld = strcmp(Info.T_fin(itrial).cond, 'old');
-    
-    if isOld & Info.T_fin(itrial).mem_resp==1
-        Info.T_fin(itrial).mem_response = 1;
-        fprintf('Correct.\n');
-    elseif isOld & Info.T_fin(itrial).mem_resp==0
-        Info.T_fin(itrial).mem_response = 0;
-        fprintf('Error.\n');
-    elseif ~isOld & Info.T_fin(itrial).mem_resp==1
-        Info.T_fin(itrial).mem_response = 0;
-        fprintf('Error.\n');
-    elseif ~isOld & Info.T_fin(itrial).mem_resp==0
-        Info.T_fin(itrial).mem_response = 1;
-        fprintf('Correct.\n');
-    end
+    % isOld = strcmp(Info.T_fin(itrial).cond, 'old');
+    % 
+    % if isOld & Info.T_fin(itrial).mem_resp==1
+    %     Info.T_fin(itrial).mem_response = 1;
+    %     fprintf('Correct.\n');
+    % elseif isOld & Info.T_fin(itrial).mem_resp==0
+    %     Info.T_fin(itrial).mem_response = 0;
+    %     fprintf('Error.\n');
+    % elseif ~isOld & Info.T_fin(itrial).mem_resp==1
+    %     Info.T_fin(itrial).mem_response = 0;
+    %     fprintf('Correct.\n');
+    % elseif ~isOld & Info.T_fin(itrial).mem_resp==0
+    %     Info.T_fin(itrial).mem_response = 1;
+    %     fprintf('Error.\n');
+    % end
     
     end
 
