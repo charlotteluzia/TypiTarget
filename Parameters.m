@@ -149,12 +149,12 @@ end
 % lower presentation time of image
 switch P.version
     case 'sevenh'
-        P.ImgDur  = 0.700;
+        P.ImgDur  = 0.7;
     case 'fiveh'
-        P.ImgDur  = 0.500;
+        P.ImgDur  = 0.5;
 end
 
-P.ISI_Dur = 1.500;
+P.ISI_Dur = 1.5;
 
 
 

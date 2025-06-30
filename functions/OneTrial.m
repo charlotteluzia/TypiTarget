@@ -69,7 +69,9 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
     
         % Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
     
-        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(tImageOn+P.ImgDur);
+        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(P);
+        Screen('DrawTexture', window, DefaultScreen);
+        Screen('Flip', window, tImageOn+P.ImgDur);
     
         Screen('Close', ImgTex);
     

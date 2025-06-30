@@ -18,7 +18,6 @@ isQuit = 0;
 
 
 while Report == 0  % GetSecs < stop
-% while Report==0
     [keyIsDown,secs,keyCode] = KbCheck;
     if keyIsDown
         if keyCode(P.CertainOldKey)
