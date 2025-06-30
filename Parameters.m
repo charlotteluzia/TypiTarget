@@ -25,7 +25,7 @@ else
     switch P.thismachine
         case 'DESKTOP-KPH292U'
             P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';            
-            P.PresentScreen = 0;
+            P.PresentScreen = 2;
             P.myWidth       = 1920;
             P.myHeight      = 1080;
             P.myRate        = 60;
@@ -38,7 +38,7 @@ end
 switch P.Flavor
     case 'training'
         P.doFeedback = 1;
-        P.FeedbackDuration = 0.2;
+        P.FeedbackDuration = 0.3;
     otherwise
         P.doFeedback = 0;
 end
@@ -89,11 +89,6 @@ P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
 %% -----------------------------------------------------------------------
 % Parameters of categorization and memory task
 %  -----------------------------------------------------------------------
-% P.cat_text = {'[Press j if the image shows a supermarket]'}; % count occurences of supermarkets by pressing button
-% P.cat_cues = {'[f]', '[j]'};
-% P.cat_responseText = {'[no]', '[yes]'};
-% P.cat_responseText = {'[nein]', '[ja]'};
-
 
 P.mem_cues = {'[d]', '[f]', '[j]', '[k]'};
 P.mem_responseText = ['[sicher alt]', '[sicher neu]']; % , '[eher alt]', '[eher neu]'
@@ -105,10 +100,10 @@ P.mem_responseText = ['[sicher alt]', '[sicher neu]']; % , '[eher alt]', '[eher 
 %% -----------------------------------------------------------------------
 % Images
 %  -----------------------------------------------------------------------
-P.prop_typ = 0.4;  % proportion of typical images of 100 trials
-P.prop_untyp = 0.2;
-P.prop_target = 0.2;
-P.prop_nontarget = 0.2;
+P.prop_typ       = 0.4;  % proportion of typical images
+P.prop_untyp     = 0.2;  % proportion of untypical images
+P.prop_target    = 0.2;  % proportion of target images
+P.prop_nontarget = 0.2;  % proportion of nontarget images
 
 switch P.Flavor
     case 'training'
@@ -124,7 +119,7 @@ switch P.Flavor
         P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
         P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
 
-        P.BreakAfternTrials = (P.n_standard + P.n_target + P.n_nontarget)*2 - (P.n_target + P.n_nontarget);
+        P.BreakAfternTrials = (P.n_standard)*2 + (P.n_target + P.n_nontarget);
 
 
 
@@ -150,10 +145,15 @@ end
 %% -----------------------------------------------------------------------
 % Parameters of the procedure
 %  -----------------------------------------------------------------------
+% Timing parameters. Two different versions, one with higher and one with
+% lower presentation time of image
+switch P.version
+    case 'sevenh'
+        P.ImgDur  = 0.700;
+    case 'fiveh'
+        P.ImgDur  = 0.500;
+end
 
-
-% Timing parameters.
-P.ImgDur  = 0.700;
 P.ISI_Dur = 1.500;
 
 

@@ -8,12 +8,24 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = 'test4';
-% choose training for a practice run, choose full to run the full experiment
-flavor = 'full';
-% which version do you want to run? (image presentation time differs in oddball task)
-% version sevenh: 700ms, version fiveh: 500ms 
-version = 'sevenh';
+name = 'test';
+flavor = 'training';
+%% ---------------------------------------------------------------------
+% Check if inputs are correct..
+% ---------------------------------------------------------------------
+% if nargin ~= 2
+%     warning('You need to specify two input arguments: name and flavor.')
+%     warning('Quitting now.')
+%     return
+% else
+%     allowed_flavors = {'training', 'typitarget'};
+%     if ~ismember(flavor, allowed_flavors)
+%     warning('Flavor can be "training" or "typitarget".')
+%     warning('Quitting now.')
+%     return
+%     end
+% end
+
 
 %% ---------------------------------------------------------------------
 % Add paths and initialize global variables. and test if logfile exists for this subject.
@@ -31,7 +43,6 @@ rng("shuffle");
 % Initiate file names and load Parameters.
 % ---------------------------------------------------------------------
 P.Flavor = flavor;
-P.version = version;
 
 [P] = Parameters(P);
 
@@ -109,9 +120,7 @@ isQuit = false;
 for itrial = 1:length(Info.T_fin)
     
     % Run the trial.
-    % Priority(double(~P.doSkipSyncTest));
     [Info, isQuit] = OneTrial(itrial);
-    % Priority(0);
 
     if isQuit
         disp('Quit.')
