@@ -31,7 +31,7 @@ rng("shuffle");
 % Initiate file names and load Parameters.
 % ---------------------------------------------------------------------
 P.Flavor = flavor;
-P.version = version;
+P.Version = version;
 
 [P] = Parameters(P);
 

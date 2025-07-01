@@ -4,9 +4,18 @@ global window Info P DefaultScreen;
 % ----------------------------------------------------------------------
 % Present pause a regular intervals and when a new block starts.
 % ----------------------------------------------------------------------
-if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
-    PresentPause(window, P, Info, itrial)
-end 
+switch P.Flavor
+    case 'training'
+        if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
+            PresentPause_Training(window, P, Info, itrial)
+        end 
+     
+    case 'full'
+        if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
+            PresentPause(window, P, Info, itrial)
+        end
+end
+
 
 % ----------------------------------------------------------------------
 % Display trial info on experimenter's screen.
@@ -57,21 +66,21 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
 % Screen('DrawTexture', window, DefaultScreen);
 % Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
 % [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
-
+rt_time = 0;
 % Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
   if strcmp(Info.T_fin(itrial).task, 'oddball')
         Screen('DrawTexture', window, DefaultScreen);
         Screen('DrawTexture', window, ImgTex, [], Pos);
         % Screen('DrawTexture', window, ImgTex, [], ImgRect);
-        [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI); % P.ISI_Dur);
+        [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI - rt_time); % P.ISI_Dur);
     
         Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
     
         % Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
     
-        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(P);
         Screen('DrawTexture', window, DefaultScreen);
         Screen('Flip', window, tImageOn+P.ImgDur);
+        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(P);
     
         Screen('Close', ImgTex);
     

@@ -147,7 +147,7 @@ end
 %  -----------------------------------------------------------------------
 % Timing parameters. Two different versions, one with higher and one with
 % lower presentation time of image
-switch P.version
+switch P.Version
     case 'sevenh'
         P.ImgDur  = 0.7;
     case 'fiveh'

@@ -11,7 +11,7 @@ now = GetSecs;
 Report = NaN;
 isQuit = 0;
 
-timeout = 3.0;
+timeout = 1.5;
 stop = now + timeout;
 
 
