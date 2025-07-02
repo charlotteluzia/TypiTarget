@@ -25,7 +25,7 @@ else
     switch P.thismachine
         case 'DESKTOP-KPH292U'
             P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';            
-            P.PresentScreen = 2;
+            P.PresentScreen = 0;
             P.myWidth       = 1920;
             P.myHeight      = 1080;
             P.myRate        = 60;
@@ -119,7 +119,7 @@ switch P.Flavor
         P.n_target    = ceil(P.prop_target    * P.n_trials_per_block);
         P.n_nontarget = ceil(P.prop_nontarget * P.n_trials_per_block);
 
-        P.BreakAfternTrials = (P.n_standard)*2 + (P.n_target + P.n_nontarget);
+        P.BreakAfternTrials = (P.n_standard)*3 + (P.n_target + P.n_nontarget);
 
 
 

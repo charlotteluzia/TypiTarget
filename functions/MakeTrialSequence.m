@@ -223,47 +223,148 @@ function valid = is_valid_order(category)
         end
     end
 end
+
+% --- Function to check for consecutive category violations ---
+% function valid = is_valid_order(category)
+%     valid = true;
+%     for i = 2:length(category)
+%         lastprev = category{i-2};
+%         prev = category{i-1};
+%         curr = category{i};
+%         if strcmp(lastprev, 'target') && strcmp(prev, 'target') && strcmp(curr, 'target')
+%             valid = false; return;
+%         elseif strcmp(lastprev, 'nontarget') && strcmp(prev, 'nontarget') && strcmp(curr, 'nontarget')
+%             valid = false; return;
+%         elseif (strcmp(prev, 'target') && strcmp(curr, 'nontarget')) || ...
+%                (strcmp(prev, 'nontarget') && strcmp(curr, 'target'))
+%             valid = false; return;
+%         end
+%     end
+% end
 %%
 
-% Combine both structures into one array
-allStructs = [finalStruct, randomizedStruct];
+% % Combine both structures into one array
+% allStructs = [finalStruct, randomizedStruct];
+% 
+% % Extract all block_total values
+% allBlockTotals = [allStructs.block_total];
+% 
+% % Get unique block_total values in sorted order
+% uniqueBlocks = unique(allBlockTotals);
+% 
+% % Randomize the order of block_total groups
+% randOrder = uniqueBlocks(randperm(length(uniqueBlocks)));
+% 
+% % Initialize combined structure
+% T_fin = struct([]);
+% 
+% % Index for combinedStruct
+% idx = 1;
+% 
+% % Loop through each unique block_total value
+% for i = 1:length(randOrder)
+%     currentBlock = randOrder(i);
+% 
+%     % Find matching elements in finalStruct
+%     aMatch = finalStruct([finalStruct.block_total] == currentBlock);
+% 
+%     % Find matching elements in randomizedStruct
+%     bMatch = randomizedStruct([randomizedStruct.block_total] == currentBlock);
+% 
+%     % Combine them
+%     group = [aMatch, bMatch];
+% 
+%     T_fin = [T_fin, group];
+% 
+%     % Add to combined structure
+%     % for j = 1:length(group)
+%     %     combinedStruct(idx) = group(j);
+%     %     idx = idx + 1;
+%     % end
+% end
 
-% Extract all block_total values
-allBlockTotals = [allStructs.block_total];
+%%
+% 
+% % Step 1: Get all unique block_total values
+% allBlockTotals = [finalStruct.block_total, randomizedStruct.block_total];
+% uniqueBlocks = unique(allBlockTotals);
+% uniqueBlocks = sort(uniqueBlocks);  % e.g., [1,2,3,4,5,6]
+% 
+% % Step 2: Initialize combined structure
+% combinedStruct = struct([]);
+% idx = 1;
+% 
+% % Step 3: Set chunk size (3)
+% chunkSize = 2;
+% numBlocks = length(uniqueBlocks);
+% 
+% % Step 4: Process in position-based chunks of 3
+% for k = 1:chunkSize:numBlocks
+%     chunkEnd = min(k + chunkSize - 1, numBlocks);
+% 
+%     % Get current chunk of block_total values
+%     currentChunk = uniqueBlocks(k:chunkEnd);
+% 
+%     % Randomize the chunk
+%     randChunk = currentChunk(randperm(length(currentChunk)));
+% 
+%     % For each block_total in the randomized chunk
+%     for i = 1:length(randChunk)
+%         currentBlock = randChunk(i);
+% 
+%         % Get matches from structA and structB
+%         aMatch = finalStruct([finalStruct.block_total] == currentBlock);
+%         bMatch = randomizedStruct([randomizedStruct.block_total] == currentBlock);
+% 
+%         % Combine and add to combinedStruct
+%         group = [aMatch, bMatch];
+%         combinedStruct = [combinedStruct, group];
+% 
+%         % for j = 1:length(group)
+%         %     combinedStruct(idx) = group(j);
+%         %     idx = idx + 1;
+%         % end
+%     end
+% end
 
-% Get unique block_total values in sorted order
-uniqueBlocks = unique(allBlockTotals);
+%%
+% two groups if 2 blocks per category, each group with randomized order of
+% category kitchen, bedroom and living room, variable block_total stays
+% same 
+% Step 1: Define the block groups
+setA = [1, 3, 5];
+setB = [2, 4, 6];
 
-% Randomize the order of block_total groups
-randOrder = uniqueBlocks(randperm(length(uniqueBlocks)));
+% Step 2: Shuffle each set independently
+shuffledA = setA(randperm(length(setA)));
+shuffledB = setB(randperm(length(setB)));
 
-% Initialize combined structure
+% Step 3: Combine both shuffled sets into one final order
+finalOrder = [shuffledA, shuffledB];  % You can also interleave or reverse if needed
+
+% Step 4: Initialize combined structure
 T_fin = struct([]);
-
-% Index for combinedStruct
 idx = 1;
 
-% Loop through each unique block_total value
-for i = 1:length(randOrder)
-    currentBlock = randOrder(i);
-
-    % Find matching elements in structA
-    aMatch = finalStruct([finalStruct.block_total] == currentBlock);
+% Step 5: Go through finalOrder and collect matching elements
+for i = 1:length(finalOrder)
+    currentBlock = finalOrder(i);
     
-    % Find matching elements in structB
+    % Get matches from structA and structB
+    aMatch = finalStruct([finalStruct.block_total] == currentBlock);
     bMatch = randomizedStruct([randomizedStruct.block_total] == currentBlock);
-
-    % Combine them
+    
+    % Combine and add to final structure
     group = [aMatch, bMatch];
-
     T_fin = [T_fin, group];
 
-    % Add to combined structure
     % for j = 1:length(group)
     %     combinedStruct(idx) = group(j);
     %     idx = idx + 1;
     % end
 end
+
+
 
 
 end

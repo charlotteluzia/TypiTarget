@@ -66,13 +66,17 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
 % Screen('DrawTexture', window, DefaultScreen);
 % Screen('DrawTexture', window, ImgTex); % , [], ImgRect);
 % [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
-rt_time = 0;
+% rt_time = 0;
 % Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
   if strcmp(Info.T_fin(itrial).task, 'oddball')
         Screen('DrawTexture', window, DefaultScreen);
         Screen('DrawTexture', window, ImgTex, [], Pos);
         % Screen('DrawTexture', window, ImgTex, [], ImgRect);
-        [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI - rt_time); % P.ISI_Dur);
+        if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
+            [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI - 0.0); % P.ISI_Dur);
+        else
+            [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI - Info.T_fin(itrial-1).RT);
+        end
     
         Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
     
