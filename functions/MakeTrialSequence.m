@@ -44,8 +44,8 @@ block_cat_total = 1;
 
 for icat = 1:length(P.scene_categories)
 
-    idx_typ   = find([stim_select(icat).info.p_typicality]  > typicality_median(icat));
-    idx_untyp = find([stim_select(icat).info.p_typicality] <= typicality_median(icat));
+    idx_typ   = find([stim_select(icat).info.p_typicality] >= typicality_median(icat)); % >
+    idx_untyp = find([stim_select(icat).info.p_typicality] < typicality_median(icat)); % <=
 
 
     for i_cat_block = 1:P.nblocks_per_category
@@ -99,8 +99,8 @@ for imem = 1:length(P.scene_categories)
     % is it ok to calculate new median at this stage? or should median be
     % same for all available images out of dataset, not just for available
     % images after "using" some
-    idx_typ   = find([stim_available(imem).info.p_typicality]  > typicality_median(imem));
-    idx_untyp = find([stim_available(imem).info.p_typicality] <= typicality_median(imem));
+    idx_typ   = find([stim_available(imem).info.p_typicality] >= typicality_median(imem));
+    idx_untyp = find([stim_available(imem).info.p_typicality] < typicality_median(imem));
 
 
 
@@ -196,7 +196,7 @@ end
 
 % --- Function to reorder a block avoiding category adjacency conflicts ---
 function ordered = reorder_block_with_constraints(tbl)
-    max_attempts = 1000;
+    max_attempts = 5000000;
     for attempt = 1:max_attempts
         shuffled = tbl(randperm(height(tbl)), :);
         if is_valid_order(shuffled.category)

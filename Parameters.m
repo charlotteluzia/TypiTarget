@@ -13,19 +13,19 @@ P.doSkipSyncTest = 1; % if==1: no synctest and normal priority (this is for test
 %  -----------------------------------------------------------------------
 P.thismachine = get_machine;
 
-if strcmpi(P.thismachine, '') % behavioral lab
+if strcmpi(P.thismachine, 'busch01') % behavioral lab
     P.PresentScreen = 2;
-    P.myWidth       = 1280;
-    P.myHeight      = 1024;
-    P.myRate        = 100;
-    P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';
+    P.myWidth       = 1920;
+    P.myHeight      = 1080;
+    P.myRate        = 60;
+    P.ImagePath     = 'C:\Users\blguest\Desktop\TypiTarget\stimuli\';
             
     
 else        
     switch P.thismachine
         case 'DESKTOP-KPH292U'
             P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';            
-            P.PresentScreen = 0;
+            P.PresentScreen = 2;
             P.myWidth       = 1920;
             P.myHeight      = 1080;
             P.myRate        = 60;
@@ -125,8 +125,8 @@ switch P.Flavor
 
     otherwise
         P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'};
-        P.nblocks_per_category = 2;
-        P.n_trials_per_block = 20;
+        P.nblocks_per_category = 1;
+        P.n_trials_per_block = 80;
 
         P.stim_140       = 'stimuli_info_140.xlsx';
         P.stim_target    = 'stimuli_info_target.xlsx';
