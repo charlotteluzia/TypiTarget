@@ -27,8 +27,8 @@ dur_total_enconde + dur_total_test
 n_trials_per_block = 100;
 blocks = 2;
 
-prop_typ       = 0.5;  % proportion of typical images
-prop_untyp     = 0.2;  % proportion of untypical images
+prop_typ       = 0.45;  % proportion of typical images
+prop_untyp     = 0.15;  % proportion of untypical images
 prop_target    = 0.15;  % proportion of target images
 prop_nontarget = 0.15;  %
 

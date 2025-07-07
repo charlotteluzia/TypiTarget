@@ -66,10 +66,8 @@ for icat = 1:length(P.scene_categories)
         
     end
 end
-
 %%
-% this version works only with less or equal to 10% targets and 10%
-% nontargets
+
 T_table = struct2table(T);
 
 % Shuffle block order
@@ -77,87 +75,7 @@ blocks = unique(T_table.block_total);
 shuffledBlocks = blocks(randperm(length(blocks)));
 
 % Final output
-finalStruct = [];
-finalIndex = 1;
-
-for i = 1:length(shuffledBlocks)
-    % Extract block
-    block_rows = T_table(T_table.block_total == shuffledBlocks(i), :);
-
-    % Separate by category
-    is_target = strcmp(block_rows.category, 'target');
-    is_nontarget = strcmp(block_rows.category, 'nontarget');
-    is_other = ~(is_target | is_nontarget);
-
-    targets = block_rows(is_target, :);
-    nontargets = block_rows(is_nontarget, :);
-    others = block_rows(is_other, :);
-
-    specials = [targets; nontargets];
-    specials = specials(randperm(height(specials)), :);
-    others = others(randperm(height(others)), :);
-
-    % Constraint check
-    if height(specials) > height(others) + 1
-        error(['Block "%s" has too many special trials. Required: ≤%d, Found: %d'], ...
-              string(shuffledBlocks(i)), height(others)+1, height(specials));
-    end
-
-    % Create N+1 gaps
-    num_gaps = height(others) + 1;
-    gaps = cell(num_gaps, 1);
-
-    % Assign specials to non-adjacent gaps using random spacing of 2 or more
-    special_idx = 1;
-    current_gap = randi([1, 2]);  % Random start at gap 1 or 2
-
-    while special_idx <= height(specials)
-        if current_gap > num_gaps
-            error('Not enough spacing available to insert specials with desired gaps.');
-        end
-        gaps{current_gap} = specials(special_idx, :);
-        special_idx = special_idx + 1;
-
-        % Jump forward by random 2–3 gap steps
-        jump = randi([2, 3]);
-        current_gap = current_gap + jump;
-    end
-
-    % Reconstruct block
-    block = table();
-    for k = 1:height(others)
-        if ~isempty(gaps{k})
-            block = [block; gaps{k}];
-        end
-        block = [block; others(k, :)];
-    end
-    if ~isempty(gaps{end})
-        block = [block; gaps{end}];
-    end
-
-    % Add to final struct
-    block_struct = table2struct(block);
-    block_struct = block_struct.';
-    finalStruct = [finalStruct, block_struct];
-    % for j = 1:length(block_struct)
-    %     finalStruct(finalIndex) = block_struct(j);
-    %     finalIndex = finalIndex + 1;
-    % end
-end
-
-
-
-%%
-% this version works with 20% targets and 20% nontargets, and 15% for both
-% groups
-T_table = struct2table(T);
-
-% Shuffle block order
-blocks = unique(T_table.block_total);
-shuffledBlocks = blocks(randperm(length(blocks)));
-
-% Final output
-finalStruct = [];
+finalStruct = struct();
 finalIndex = 1;
 
 for i = 1:length(shuffledBlocks)
@@ -211,12 +129,10 @@ for i = 1:length(shuffledBlocks)
 
     % Add to final struct
     block_struct = table2struct(block);
-    block_struct = block_struct.';
-    finalStruct = [finalStruct, block_struct];
-    % for j = 1:length(block_struct)
-    %     finalStruct(finalIndex) = block_struct(j);
-    %     finalIndex = finalIndex + 1;
-    % end
+    for j = 1:length(block_struct)
+        finalStruct(finalIndex) = block_struct(j);
+        finalIndex = finalIndex + 1;
+    end
 end
 
 
