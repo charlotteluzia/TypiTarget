@@ -4,6 +4,7 @@
 % in case of indoor scene stimuli (bedroom/living room/kitchen) additional
 % ratings of typicality available, typicality ratings serve as criterion of
 % selection 
+% images for standard categories in ODDBALL TASK
  
 stim_140            = readtable(P.stim_140);
 match               = wildcardPattern + '/';
@@ -379,6 +380,38 @@ for icat = 1:length(P.scene_categories)
 end
 
 %%
+% read excel files with image name and category
+% in case of indoor scene stimuli (bedroom/living room/kitchen) additional
+% ratings of typicality available, typicality ratings serve as criterion of
+% selection 
+% images for standard categories in MEMORY TASK
+ 
+stim_mem            = readtable(P.stim_mem);
+
+% match               = wildcardPattern + '/';
+% stim_140.stimulus   = erase(stim_140.stimulus, match);
+
+% stim_targets_idx    = readtable(P.stim_target);
+% stim_nontargets_idx = readtable(P.stim_nontarget);
+% stim_targets        = table2struct(stim_targets_idx);
+% stim_nontargets     = table2struct(stim_nontargets_idx);
+% stim_targets        = struct('info', stim_targets);
+% stim_nontargets     = struct('info', stim_nontargets);
+
+%%
+% get info for room categories for standard stimuli for memory task
+stim_available = struct([]);
+for imem = 1:length(P.scene_categories)
+    mem_name = P.scene_categories{imem};
+    mem_idx  = strcmp(stim_mem.category, mem_name);
+    mem_tab  = stim_mem(mem_idx,:);
+    mem_struct = table2struct(mem_tab);
+    stim_available(imem).info = mem_struct;
+
+    typicality_median(imem) = median([stim_select(imem).info.p_typicality]);
+end
+
+%%
 % get new images/foils for the memory task
 
 M = struct();
@@ -411,10 +444,14 @@ end
 
 %%
 % struct for memory task, including images of oddball task plus new foils
+% act on copy of T
 T_C = T;
 allCatnames = {T_C.category};
+% delete all entries with target/nontarget as category, these do not go
+% into the memory struct
 idxDel = contains(allCatnames, 'target');
 T_C(idxDel) = [];
+% perform some adjustments to make it suitable for further processing
 T_C = struct2table(T_C);
 T_C.task = strrep(T_C.task, 'oddball', 'memory');
 T_C = table2struct(T_C);
@@ -606,37 +643,60 @@ randomizedStruct = horzcat(groupedStruct{:});
 % two groups if 2 blocks per category, each group with randomized order of
 % category kitchen, bedroom and living room, variable block_total stays
 % same 
-% Step 1: Define the block groups
-setA = [1, 3, 5];
-setB = [2, 4, 6];
+if P.nblocks_per_category == 2
+    % Step 1: Define the block groups
+    setA = [1, 3, 5];
+    setB = [2, 4, 6];
 
-% Step 2: Shuffle each set independently
-shuffledA = setA(randperm(length(setA)));
-shuffledB = setB(randperm(length(setB)));
-
-% Step 3: Combine both shuffled sets into one final order
-finalOrder = [shuffledA, shuffledB];  % You can also interleave or reverse if needed
-
-% Step 4: Initialize combined structure
-T_fin = struct([]);
-idx = 1;
-
-% Step 5: Go through finalOrder and collect matching elements
-for i = 1:length(finalOrder)
-    currentBlock = finalOrder(i);
+    % Step 2: Shuffle each set independently
+    shuffledA = setA(randperm(length(setA)));
+    shuffledB = setB(randperm(length(setB)));
     
-    % Get matches from structA and structB
-    aMatch = finalStruct([finalStruct.block_total] == currentBlock);
-    bMatch = randomizedStruct([randomizedStruct.block_total] == currentBlock);
+    % Step 3: Combine both shuffled sets into one final order
+    finalOrder = [shuffledA, shuffledB];  % You can also interleave or reverse if needed
     
-    % Combine and add to final structure
-    group = [aMatch, bMatch];
-    T_fin = [T_fin, group];
+    % Step 4: Initialize combined structure
+    T_fin = struct([]);
+    idx = 1;
+    
+    % Step 5: Go through finalOrder and collect matching elements
+    for i = 1:length(finalOrder)
+        currentBlock = finalOrder(i);
+        
+        % Get matches from finalStruct and randomizedStruct
+        aMatch = finalStruct([finalStruct.block_total] == currentBlock);
+        bMatch = randomizedStruct([randomizedStruct.block_total] == currentBlock);
+        
+        % Combine and add to final structure
+        group = [aMatch, bMatch];
+        T_fin = [T_fin, group];
+    
+        % for j = 1:length(group)
+        %     combinedStruct(idx) = group(j);
+        %     idx = idx + 1;
+        % end
+    end
 
-    % for j = 1:length(group)
-    %     combinedStruct(idx) = group(j);
-    %     idx = idx + 1;
-    % end
+elseif P.nblocks_per_category == 1
+    setC = [1, 2, 3];
+    shuffledC = setC(randperm(length(setC)));
+
+    T_fin = struct([]);
+
+    for i = 1:length(shuffledC)
+        currentBlock = shuffledC(i);
+        
+        % Get matches from finalStruct and randomizedStruct
+        aMatch = finalStruct([finalStruct.block_total] == currentBlock);
+        bMatch = randomizedStruct([randomizedStruct.block_total] == currentBlock);
+        
+        % Combine and add to final structure
+        group = [aMatch, bMatch];
+        T_fin = [T_fin, group];
+
+    end
+
+
 end
 
 
