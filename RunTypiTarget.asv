@@ -144,5 +144,5 @@ CloseAndCleanup(P)
 %----------------------------------------------------------------------
 % Write mat file to csv file
 %----------------------------------------------------------------------
-filename = fprintf('TypT_%d_%d_logfile.csv', flavor, name);
-writetable(struct2table(Info.T_fin), filename);
+filename = 'TypT_%d_%d_logfile.csv'
+writetable(struct2table(Info.T_fin), );

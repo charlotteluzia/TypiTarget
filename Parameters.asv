@@ -93,7 +93,7 @@ P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
 P.mem_cues = {'[d]', '[f]', '[j]', '[k]'};
 P.mem_responseOld = ['    sicher alt        ', '       eher alt         '];
 P.mem_responseNew = ['     eher neu         ', '       sicher neu      '];
-P.mem_responseText = ['sicher alt', 'eher alt', 'eher neu', 'sicher neu'];
+P.mem_responseText = ['\t\t\t', 'sicher alt', '\t\t\t', 'eher alt',]
 % P.mem_responseText = {'[certainly old]', '[rather old]', '[rather new]', '[certainly new]'};
 
 %P.mem_location
@@ -138,7 +138,7 @@ switch P.Flavor
     otherwise
         P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'};
         P.nblocks_per_category = 2;
-        P.n_trials_per_block = 20;
+        P.n_trials_per_block = 30;
 
         P.stim_140       = 'stimuli_info_140.xlsx';
         P.stim_target    = 'stimuli_info_target.xlsx';

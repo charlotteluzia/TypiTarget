@@ -386,7 +386,7 @@ end
 % selection 
 % images for standard categories in MEMORY TASK
  
-% stim_mem            = readtable(P.stim_mem);
+stim_mem            = readtable(P.stim_mem);
 
 % match               = wildcardPattern + '/';
 % stim_140.stimulus   = erase(stim_140.stimulus, match);
@@ -400,16 +400,16 @@ end
 
 %%
 % get info for room categories for standard stimuli for memory task
-% stim_available = struct([]);
-% for imem = 1:length(P.scene_categories)
-%     mem_name = P.scene_categories{imem};
-%     mem_idx  = strcmp(stim_mem.category, mem_name);
-%     mem_tab  = stim_mem(mem_idx,:);
-%     mem_struct = table2struct(mem_tab);
-%     stim_available(imem).info = mem_struct;
-% 
-%     typicality_median(imem) = median([stim_select(imem).info.p_typicality]);
-% end
+stim_available = struct([]);
+for imem = 1:length(P.scene_categories)
+    mem_name = P.scene_categories{imem};
+    mem_idx  = strcmp(stim_mem.category, mem_name);
+    mem_tab  = stim_mem(mem_idx,:);
+    mem_struct = table2struct(mem_tab);
+    stim_available(imem).info = mem_struct;
+
+    typicality_median(imem) = median([stim_select(imem).info.p_typicality]);
+end
 
 %%
 % get new images/foils for the memory task
