@@ -108,8 +108,44 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
 
 
         % calculate position of image for isolation spread effect
-        % images presented before or behind a target or nontarget 
-    
+        % images presented before or behind a target or nontarget
+        % keep track of filenames of images with isolation spread effect to
+        % mark then in memory task
+
+
+        if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
+            if ~contains(Info.T_fin(itrial).category, 'target') & contains(Info.T_fin(itrial+1).category, 'target')
+                Info.T_fin(itrial).iso_spread = 1;
+                Info.file_list_iso = ["Info.file_list_iso", "Info.T_fin(itrial).filename"];
+            else
+                Info.T_fin(itrial).iso_spread = 0;
+            end
+
+        elseif strcmp(Info.T_fin(itrial+1).task, 'memory')
+            if ~contains(Info.T_fin(itrial).category, 'target') & contains(Info.T_fin(itrial-1).category, 'target')
+                Info.T_fin(itrial).iso_spread = 1;
+                Info.file_list_iso = [Info.file_list_iso, Info.T_fin(itrial).filename];
+            else
+                Info.T_fin(itrial).iso_spread = 0;
+            end
+
+        else
+            if ~contains(Info.T_fin(itrial-1).category, 'target') & contains(Info.T_fin(itrial+1).category, 'target')...
+                    & ~contains(Info.T_fin(itrial).category, 'target')
+                Info.T_fin(itrial).iso_spread = 1;
+                Info.file_list_iso = [Info.file_list_iso, Info.T_fin(itrial).filename];
+            elseif contains(Info.T_fin(itrial-1).category, 'target') & ~contains(Info.T_fin(itrial+1).category, 'target')...
+                    & ~contains(Info.T_fin(itrial).category, 'target')
+                Info.T_fin(itrial).iso_spread = 1;
+                Info.file_list_iso = [Info.file_list_iso, Info.T_fin(itrial).filename];
+            else
+                Info.T_fin(itrial).iso_spread = 0;
+            end
+
+        end
+
+
+ 
     elseif strcmp(Info.T_fin(itrial).task, 'memory')
     
         Screen('DrawTexture', window, MemScreen);
@@ -127,6 +163,32 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
     
         % Response time
         Info.T_fin(itrial).RT = rt_time - tImageOn;
+
+        % if strcmp(Info.T_fin(itrial).cond, 'old')
+        %     for f = 1:length(Info.T_fin)
+        %         if strcmp(Info.T_fin(itrial).filename, Info.T_fin(f).filename)
+        %             Info.T_fin(itrial).iso_spread = 1;
+        %             continue;
+        %         else
+        %             Info.T_fin(itrial).iso_spread = 0;
+        %         end
+        %     end
+        % elseif strcmp(Info.T_fin(itrial).cond, 'new')
+        %     Info.T_fin(itrial).iso_spread = 0;
+        % end
+
+        if strcmp(Info.T_fin(itrial).cond, 'old')
+            for f = 1:length(Info.file_list_iso)
+                if strcmp(Info.T_fin(itrial).filename, Info.file_list_iso{f})
+                    Info.T_fin(itrial).iso_spread = 1;
+                    continue;
+                else
+                    Info.T_fin(itrial).iso_spread = 0;
+                end
+            end
+        elseif strcmp(Info.T_fin(itrial).cond, 'new')
+            Info.T_fin(itrial).iso_spread = 0;
+        end
     
         % Memory task
         % did the subject say "(rather)/old" or "(rather)/new"?

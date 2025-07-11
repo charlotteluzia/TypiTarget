@@ -121,7 +121,7 @@ switch P.Flavor
     case 'training'
         P.scene_categories = {'standard'};
         P.nblocks_per_category = 1;
-        P.n_trials_per_block = 20;
+        P.n_trials_per_block = 10;
 
         P.stim_140       = 'stimuli_training_standard.xlsx';
         P.stim_target    = 'stimuli_training_target.xlsx';

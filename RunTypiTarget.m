@@ -108,6 +108,7 @@ tic;
 
 % ----- Loop over trials -----
 isQuit = false;
+Info.file_list_iso = {};
 
 for itrial = 1:length(Info.T_fin)
     
@@ -128,7 +129,7 @@ for itrial = 1:length(Info.T_fin)
     Info.ntrials = itrial;
     Info.tTotal  = toc;
     Info.tFinish = {datestr(clock)};
-    % Info.T_fin(itrial).participant = name;
+    Info.T_fin(itrial).participant = name;
     
     save(Info.Logfilename, 'Info');
 
@@ -144,5 +145,6 @@ CloseAndCleanup(P)
 %----------------------------------------------------------------------
 % Write mat file to csv file
 %----------------------------------------------------------------------
-filename = fprintf('TypT_%d_%d_logfile.csv', flavor, name);
-writetable(struct2table(Info.T_fin), filename);
+% filename = fprintf('TypT_%d_%d_logfile.csv', flavor, name);
+% Info_T_fin = struct2table(Info.T_fin);
+% writetable(struct2table(Info.T_fin), fullfile('TypT_'flavor'_'name'.csv'filename);
