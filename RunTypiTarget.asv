@@ -8,7 +8,7 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = 'testRandom_odd2';
+name = 'testText';
 % choose training for a practice run, choose full to run the full experiment
 flavor = 'full';
 % which version do you want to run? (image presentation time differs in oddball task)

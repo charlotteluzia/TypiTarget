@@ -25,7 +25,7 @@ else
     switch P.thismachine
         case 'DESKTOP-KPH292U'
             P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';            
-            P.PresentScreen = 2;
+            P.PresentScreen = 0;
             P.myWidth       = 1920;
             P.myHeight      = 1080;
             P.myRate        = 60;
@@ -121,7 +121,7 @@ switch P.Flavor
     case 'training'
         P.scene_categories = {'standard'};
         P.nblocks_per_category = 1;
-        P.n_trials_per_block = 10;
+        P.n_trials_per_block = 20;
 
         P.stim_140       = 'stimuli_training_standard.xlsx';
         P.stim_target    = 'stimuli_training_target.xlsx';
