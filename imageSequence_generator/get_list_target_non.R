@@ -96,8 +96,8 @@ df_train_nontarget$category  <- 'nontarget'
 df_train_nontarget           <- df_train_nontarget %>% replace(is.na(.), 0)
 
 # write data tables as excel files
-write_xlsx(df_image_target, "stimuli_info_target.xlsx", col_names = TRUE)
-write_xlsx(df_image_nontarget, "stimuli_info_nontarget.xlsx", col_names = TRUE)
+write_xlsx(df_image_target, "stimuli_info_target_new.xlsx", col_names = TRUE)
+write_xlsx(df_image_nontarget, "stimuli_info_nontarget_new.xlsx", col_names = TRUE)
 
 
 # write training data tables as excel files

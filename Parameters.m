@@ -138,12 +138,12 @@ switch P.Flavor
     otherwise
         P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'};
         P.nblocks_per_category = 2;
-        P.n_trials_per_block = 20;
+        P.n_trials_per_block = 80;
 
         P.stim_140       = 'stimuli_info_140.xlsx';
         P.stim_target    = 'stimuli_info_target.xlsx';
         P.stim_nontarget = 'stimuli_info_nontarget.xlsx';
-        P.stim_mem       = 'stimuli_info_memory.xlsx';
+        P.stim_mem       = 'stimuli_info_add_TypT.xlsx';
 
         P.n_typ       = ceil(P.prop_typ       * P.n_trials_per_block);
         P.n_untyp     = ceil(P.prop_untyp     * P.n_trials_per_block);
