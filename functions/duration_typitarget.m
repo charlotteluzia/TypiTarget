@@ -7,10 +7,20 @@ dur_isi = 1500;
 % n_tar = 10;
 % n_non = 10;
 
-n_typ = 32;
-n_untyp = 16;
-n_tar = 16;
-n_non = 16;
+% n_typ = 32;
+% n_untyp = 16;
+% n_tar = 16;
+% n_non = 16;
+
+% n_typ = 40;
+% n_untyp = 20;
+% n_tar = 20;
+% n_non = 20;
+
+n_typ = 36;
+n_untyp = 18;
+n_tar = 18;
+n_non = 18;
 
 % Encoding blocks.
 dur_encode_block = ((n_tar + n_non + n_untyp + n_typ) * (dur_im + dur_isi)) / 60000;
