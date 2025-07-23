@@ -8,7 +8,7 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = 'testing';
+name = 'test_iso_spread2';
 % choose training for a practice run, choose full to run the full experiment
 flavor = 'full';
 % which version do you want to run? (image presentation time differs in oddball task)
@@ -160,7 +160,9 @@ if crash_restart == true
     end
 
 else
-    Info.file_list_iso = {};
+    % Info.file_list_iso_target = {};
+    % Info.file_list_iso_nontarget = {};
+    Info.files_iso_spread = struct([]);
 
     for itrial = 1:length(Info.T_fin)
     

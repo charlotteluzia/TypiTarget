@@ -299,17 +299,22 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
         
         if strcmp(Info.T_fin(itrial).cond, 'old')
             for f = 1:length(Info.files_iso_spread)
-                if strcmp(Info.T_fin(itrial).filename, Info.files_iso_spread(f).filename) & Info.files_iso_spread(f).iso_spread == 1
+                if strcmp(Info.T_fin(itrial).filename, Info.files_iso_spread(f).filename) & Info.files
                     Info.T_fin(itrial).iso_spread = 1;
-                    break
-                elseif strcmp(Info.T_fin(itrial).filename, Info.files_iso_spread(f).filename) & Info.files_iso_spread(f).iso_spread == 2
-                    Info.T_fin(itrial).iso_spread = 2;
-                    break
+                    break;
                 else
                     Info.T_fin(itrial).iso_spread = 0;
                 end
             end
-            
+            for f = 1:length(Info.file_list_iso_nontarget)
+                if strcmp(Info.T_fin(itrial).filename, Info.file_list_iso_nontarget{f})
+                    Info.T_fin(itrial).iso_spread = 2;
+                    break;
+                else
+                    Info.T_fin(itrial).iso_spread = 0;
+                end
+            end
+
         elseif strcmp(Info.T_fin(itrial).cond, 'new')
             Info.T_fin(itrial).iso_spread = 0;
         end
