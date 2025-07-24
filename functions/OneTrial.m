@@ -127,13 +127,13 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
 
         elseif strcmp(Info.T_fin(itrial+1).task, 'memory')
             if ~contains(Info.T_fin(itrial).category, 'target') & strcmp(Info.T_fin(itrial-1).category, 'target')
-                Info.T_fin(itrial).iso_spread = 1;
+                Info.T_fin(itrial).iso_spread = 3;
                 Info.files_iso_spread(end + 1).filename = Info.T_fin(itrial).filename;
-                Info.files_iso_spread(end).iso_spread = 1;
+                Info.files_iso_spread(end).iso_spread = 3;
             elseif ~contains(Info.T_fin(itrial).category, 'nontarget') & strcmp(Info.T_fin(itrial-1).category, 'nontarget')
-                Info.T_fin(itrial).iso_spread = 2;
+                Info.T_fin(itrial).iso_spread = 4;
                 Info.files_iso_spread(end + 1).filename = Info.T_fin(itrial).filename;
-                Info.files_iso_spread(end).iso_spread = 2;
+                Info.files_iso_spread(end).iso_spread = 4;
             else
                 Info.T_fin(itrial).iso_spread = 0;
             end
@@ -146,9 +146,9 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
                 Info.files_iso_spread(end).iso_spread = 1;
             elseif strcmp(Info.T_fin(itrial-1).category, 'target') & ~contains(Info.T_fin(itrial+1).category, 'target')...
                     & ~contains(Info.T_fin(itrial).category, 'target')
-                Info.T_fin(itrial).iso_spread = 1;
+                Info.T_fin(itrial).iso_spread = 3;
                 Info.files_iso_spread(end + 1).filename = Info.T_fin(itrial).filename;
-                Info.files_iso_spread(end).iso_spread = 1;
+                Info.files_iso_spread(end).iso_spread = 3;
             elseif ~contains(Info.T_fin(itrial-1).category, 'target') & strcmp(Info.T_fin(itrial+1).category, 'nontarget')...
                     & ~contains(Info.T_fin(itrial).category, 'target')
                 Info.T_fin(itrial).iso_spread = 2;
@@ -156,9 +156,9 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
                 Info.files_iso_spread(end).iso_spread = 2;
             elseif strcmp(Info.T_fin(itrial-1).category, 'nontarget') & ~contains(Info.T_fin(itrial+1).category, 'target')...
                     & ~contains(Info.T_fin(itrial).category, 'target')
-                Info.T_fin(itrial).iso_spread = 2;
+                Info.T_fin(itrial).iso_spread = 4;
                 Info.files_iso_spread(end + 1).filename = Info.T_fin(itrial).filename;
-                Info.files_iso_spread(end).iso_spread = 2;
+                Info.files_iso_spread(end).iso_spread = 4;
             else
                 Info.T_fin(itrial).iso_spread = 0;
             end
@@ -304,6 +304,12 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
                     break
                 elseif strcmp(Info.T_fin(itrial).filename, Info.files_iso_spread(f).filename) & Info.files_iso_spread(f).iso_spread == 2
                     Info.T_fin(itrial).iso_spread = 2;
+                    break
+                elseif strcmp(Info.T_fin(itrial).filename, Info.files_iso_spread(f).filename) & Info.files_iso_spread(f).iso_spread == 3
+                    Info.T_fin(itrial).iso_spread = 3;
+                    break
+                elseif strcmp(Info.T_fin(itrial).filename, Info.files_iso_spread(f).filename) & Info.files_iso_spread(f).iso_spread == 4
+                    Info.T_fin(itrial).iso_spread = 4;
                     break
                 else
                     Info.T_fin(itrial).iso_spread = 0;

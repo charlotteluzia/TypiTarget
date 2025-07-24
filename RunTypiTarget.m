@@ -8,7 +8,7 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = 'test_iso_spread2';
+name = 'test_iso_spread3';
 % choose training for a practice run, choose full to run the full experiment
 flavor = 'full';
 % which version do you want to run? (image presentation time differs in oddball task)

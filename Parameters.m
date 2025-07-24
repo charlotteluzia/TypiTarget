@@ -138,7 +138,7 @@ switch P.Flavor
     otherwise
         P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'};
         P.nblocks_per_category = 2;
-        P.n_trials_per_block = 80;
+        P.n_trials_per_block = 20;
 
         P.stim_140       = 'stimuli_info_140.xlsx';
         P.stim_target    = 'stimuli_info_target.xlsx';
