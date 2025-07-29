@@ -166,8 +166,18 @@ switch P.Version
     case 'fiveh'
         P.ImgDur  = 0.5;
 end
-
+% Interstimulus Intervall
 P.ISI_Dur = 1.5;
+
+%% -----------------------------------------------------------------------
+% Triggers
+%  -----------------------------------------------------------------------
+% Trigger parameters
+% P.TriggerDuration = 0.005;
+% P.TriggerStartRecording = xx;
+% P.TriggerStopRecording = xx;
+% 
+% P.UseTriggers
 
 
 

@@ -73,19 +73,26 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
         Screen('DrawTexture', window, DefaultScreen);
         Screen('DrawTexture', window, ImgTex, [], Pos);
         % Screen('DrawTexture', window, ImgTex, [], ImgRect);
-        if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
-            [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI - 0.0); % P.ISI_Dur);
-        else
-            [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI - Info.T_fin(itrial-1).RT);
-        end
+        % if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
+        %     [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI - 0.0); % P.ISI_Dur);
+        % else
+        %     [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI - Info.T_fin(itrial-1).RT);
+        % end
     
+        [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI);
         Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
+
+        % Send trigger
+        % if P.isEEG
+        %         Trigger = P.UseTriggers(1, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
+        %         SendTrigger(Trigger, P.TriggerDuration)
+        % end
     
         % Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
     
-        Screen('DrawTexture', window, DefaultScreen);
-        Screen('Flip', window, tImageOn+P.ImgDur);
-        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(P);
+        % Screen('DrawTexture', window, DefaultScreen);
+        % Screen('Flip', window, tImageOn+P.ImgDur);
+        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(tImageOn+P.ImgDur);
     
         Screen('Close', ImgTex);
     
@@ -256,6 +263,12 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
         [tImageOn] = Screen('Flip', window, tISIon+Info.T_fin(itrial).ISI);
     
         Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
+
+        % Send trigger
+        if P.isEEG
+                Trigger = P.UseTriggers(2, Info.T_fin(itrial).cond, Info.T_fin(itrial).category);
+                SendTrigger(Trigger, P.TriggerDuration)
+        end
     
         [Info.T_fin(itrial).Report, rt_time] = GetResponse_Mem(P);
         Screen('DrawTexture', window, MemScreen);
