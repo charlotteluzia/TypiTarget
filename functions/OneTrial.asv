@@ -79,7 +79,7 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
             if Info.T_fin(itrial-1).Report == 0
             [tImageOn] = Screen('Flip', window, tISIon);
             else
-            [tImageOn] = Screen('Flip', window, tISIon + (Info.T_fin(itrial).ISI + P.ImgDur - Info.T_fin(itrial-1).RT));
+            [tImageOn] = Screen('Flip', window, tISIon + Info.T_fin(itrial).ISI - P.ImgDur);
             end
         end
     
