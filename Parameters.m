@@ -26,8 +26,10 @@ else
         case 'DESKTOP-KPH292U'
             P.ImagePath     = 'C:\Users\User\MATLAB\TypiTarget\stimuli\';            
             P.PresentScreen = 2;
-            P.myWidth       = 1920;
-            P.myHeight      = 1080;
+            % P.myWidth       = 1920;
+            % P.myHeight      = 1080;
+            P.myWidth       = 2560;
+            P.myHeight      = 1440;
             P.myRate        = 60;
 
     end
@@ -162,20 +164,30 @@ end
 % lower presentation time of image
 switch P.Version
     case 'sevenh'
-        P.ImgDur  = 0.7;
+        P.ImgDur  = 0.700;
     case 'fiveh'
-        P.ImgDur  = 0.5;
+        P.ImgDur  = 0.500;
 end
 % Interstimulus Intervall
-P.ISI_Dur = 1.5;
+P.minISI  = 1.000;
+P.maxISI  = 2.000;
+% P.ISI_Dur = 1.500;
 
 %% -----------------------------------------------------------------------
 % Triggers
 %  -----------------------------------------------------------------------
 % Trigger parameters
+% triggers 1-255
+% we want to have different information in our triggers
+% first digit: type of event (1: image onset, 2: response)
+% second digit: task (oddball/memory)
+% third digit: scene category (target, nontarget, bedroom, kitchen, living
+% room)
+
+
 % P.TriggerDuration = 0.005;
-% P.TriggerStartRecording = xx;
-% P.TriggerStopRecording = xx;
+% P.TriggerStartRecording = 20;
+% P.TriggerStopRecording = 30;
 % 
 % P.UseTriggers
 

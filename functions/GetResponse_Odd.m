@@ -1,4 +1,4 @@
-function [Report, reactionTime] = GetResponse_Odd(imageOnset, toffset)
+function [Report, reactionTime] = GetResponse_Odd(imageOnset, toffset, ISI)
 % function [Report, secs] = GetResponse_Odd(imageOnset, toffset)
 
 % timeout determines when to stop polling for responses. 
@@ -17,7 +17,8 @@ isQuit = 0;
 KbQueueCreate();
 KbQueueStart();
 
-timeout = P.ISI_Dur;
+% timeout = P.ISI_Dur;
+timeout = ISI;
 stop = timeout + toffset;
 
 while GetSecs < toffset

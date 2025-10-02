@@ -36,11 +36,15 @@ end
 if strcmp(Info.T_fin(itrial).task,'oddball')
     Screen('DrawTexture', window, DefaultScreen);
     [tISIon] = Screen('Flip', window);
-    Info.T_fin(itrial).ISI = P.ISI_Dur;
+    % Info.T_fin(itrial).ISI = P.ISI_Dur;
+    mean_isi = mean([0 P.maxISI]);
+    Info.T_fin(itrial).ISI = P.minISI + -log(1-rand.*(1-exp(-P.maxISI./mean_isi))).*mean_isi;
 elseif strcmp(Info.T_fin(itrial).task,'memory')
     Screen('DrawTexture', window, MemScreen);
     [tISIon] = Screen('Flip', window);
-    Info.T_fin(itrial).ISI = P.ISI_Dur;
+    % Info.T_fin(itrial).ISI = P.ISI_Dur;
+    mean_isi = mean([0 P.maxISI]);
+    Info.T_fin(itrial).ISI = P.minISI + -log(1-rand.*(1-exp(-P.maxISI./mean_isi))).*mean_isi;
 end
 
 % Screen('DrawTexture', window, DefaultScreen);
@@ -79,7 +83,7 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
             if Info.T_fin(itrial-1).Report == 0
             [tImageOn] = Screen('Flip', window, tISIon);
             else
-            [tImageOn] = Screen('Flip', window, tISIon + (Info.T_fin(itrial).ISI + P.ImgDur - Info.T_fin(itrial-1).RT));
+            [tImageOn] = Screen('Flip', window, tISIon + (Info.T_fin(itrial).ISI + P.ImgDur)); % - Info.T_fin(itrial-1).RT));
             end
         end
     
@@ -96,7 +100,7 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
     
         % Screen('DrawTexture', window, DefaultScreen);
         % Screen('Flip', window, tImageOn+P.ImgDur);
-        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(tImageOn, (tImageOn+P.ImgDur));
+        [Info.T_fin(itrial).Report, rt_time] = GetResponse_Odd(tImageOn, (tImageOn+P.ImgDur), Info.T_fin(itrial).ISI);
         
         % secs = 0;
         % now = GetSecs;
@@ -229,7 +233,7 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
 
         % Send trigger
         if P.isEEG
-                Trigger = P.UseTriggers(2, Info.T_fin(itrial).cond, Info.T_fin(itrial).category);
+                Trigger = P.UseTriggers(1, Info.T_fin(itrial).cond, Info.T_fin(itrial).category);
                 SendTrigger(Trigger, P.TriggerDuration)
         end
     

@@ -1,8 +1,6 @@
 function [Report, secs] = GetResponse_Mem(P)
 
-% timeout determines when to stop polling for responses. 
-% timeout gives a value in seconds from NOW.
-% if timeout == 0, then function waits until button is pressed.
+
 global Info
 
 secs = 0;
@@ -10,15 +8,9 @@ now = GetSecs;
 Report = 0;
 isQuit = 0;
 
-
-% if timeout==0
-%     stop = inf;% no time out, wait forever
-% else
-%     stop = now + timeout;
-% end
-
-
-while Report == 0  % GetSecs < stop
+% wait until response is given which is necessary otherwise code does not
+% continue
+while Report == 0
     [keyIsDown,secs,keyCode] = KbCheck;
     if keyIsDown
         if keyCode(P.CertainOldKey)
