@@ -18,9 +18,13 @@ version = 'sevenh';
 %% ---------------------------------------------------------------------
 % Add paths and initialize global variables. and test if logfile exists for this subject.
 % ---------------------------------------------------------------------
+% add TypiTarget functions
 addpath('./Functions');
-% addpath('./Easy-TTL-trigger-master');
+% add Trigger functions
+addpath('./Easy-TTL-trigger-master');
+% add stimuli folder
 addpath('./stimuli');
+
 global Info P
 
 %  provides control over random number generation, creating a seed based on the current time
@@ -77,7 +81,7 @@ end
 % end
 
 %% --------------------------------------------------------------------
-% Define trials
+% Define trials, run either test or full experiment by determining flavor
 % ---------------------------------------------------------------------
 if crash_restart == true
     load(Info.Logfilename);
@@ -126,7 +130,10 @@ my_optimal_fixationpoint(DefaultScreen, P.CenterX, P.CenterY, 0.6, [100 100 100]
 %% --------------------------------------------------------------------
 % Run across trials.
 %----------------------------------------------------------------------
-% ShowStartScreen(window, P)
+% Trigger start
+if P.isEEG
+    SendTrigger(P.TriggerStartRecording, P.TriggerDuration)
+end
 
 % fprintf('\nNow running %d trials:\n\n', length(Info.T));
 Info.StartTime = GetSecs;
@@ -149,7 +156,6 @@ if crash_restart == true
     % Update Info structure.
     Info.T_fin(itrial).TrialCompleted = 1;
     Info.T_fin(itrial).ImgDur = P.ImgDur;
-    % Info.T_fin(itrial).participant = name;
     Info.ntrials = itrial;
     Info.tTotal  = toc;
     Info.tFinish = {datestr(clock)};
@@ -179,7 +185,6 @@ else
     % Update Info structure.
     Info.T_fin(itrial).TrialCompleted = 1;
     Info.T_fin(itrial).ImgDur = P.ImgDur;
-    % Info.T_fin(itrial).participant = name;
     Info.ntrials = itrial;
     Info.tTotal  = toc;
     Info.tFinish = {datestr(clock)};

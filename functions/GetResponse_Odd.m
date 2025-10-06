@@ -45,6 +45,10 @@ while GetSecs < stop
             if strcmpi(keyName, 'space')
                 Report = 1;
                 reactionTime = rt;
+                if P.isEEG
+                Trigger = P.UseTriggers(2, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
+                SendTrigger(Trigger, P.TriggerDuration)
+                end
                 return;
             elseif strcmpi(keyName, 'ESCAPE')
                 Report = 99;

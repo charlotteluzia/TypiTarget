@@ -183,13 +183,15 @@ P.maxISI  = 2.000;
 % second digit: task (oddball/memory)
 % third digit: scene category (target, nontarget, bedroom, kitchen, living
 % room)
+P.availTriggers = find(ismember(1:255));
+n_triggers = 2 * 3 * (length(P.scene_categories) + 2);
+P.UseTriggers = reshape(P.availTriggers(1:n_triggers), [2 3 (length(P.scene_categories) + 2)]);
+
+P.TriggerDuration = 0.005;
+P.TriggerStartRecording = 20;
+P.TriggerStopRecording = 30;
 
 
-% P.TriggerDuration = 0.005;
-% P.TriggerStartRecording = 20;
-% P.TriggerStopRecording = 30;
-% 
-% P.UseTriggers
 
 
 

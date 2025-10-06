@@ -16,7 +16,7 @@ while Report == 0
         if keyCode(P.CertainOldKey)
             Report = 1;
             if P.isEEG
-                Trigger = P.UseTriggers(2, Info.T_fin(itrial).cond, Info.T_fin(itrial).category);
+                Trigger = P.UseTriggers(2, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
                 SendTrigger(Trigger, P.TriggerDuration)
             end
             return
@@ -24,7 +24,7 @@ while Report == 0
         elseif keyCode (P.OldKey)
             Report = 2;
             if P.isEEG
-                Trigger = P.UseTriggers(2, Info.T_fin(itrial).cond, Info.T_fin(itrial).category);
+                Trigger = P.UseTriggers(2, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
                 SendTrigger(Trigger, P.TriggerDuration)
             end
             return
@@ -32,7 +32,7 @@ while Report == 0
         elseif keyCode (P.NewKey)
             Report = 3;
             if P.isEEG
-                Trigger = P.UseTriggers(2, Info.T_fin(itrial).cond, Info.T_fin(itrial).category);
+                Trigger = P.UseTriggers(2, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
                 SendTrigger(Trigger, P.TriggerDuration)
             end
             return
@@ -40,7 +40,7 @@ while Report == 0
         elseif keyCode(P.CertainNewKey)
             Report = 4;
             if P.isEEG
-                Trigger = P.UseTriggers(2, Info.T_fin(itrial).cond, Info.T_fin(itrial).category);
+                Trigger = P.UseTriggers(2, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
                 SendTrigger(Trigger, P.TriggerDuration)
             end
             return

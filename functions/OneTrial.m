@@ -91,10 +91,10 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
         Info.T_fin(itrial).tImageOn = tImageOn - Info.StartTime;
 
         % Send trigger
-        % if P.isEEG
-        %         Trigger = P.UseTriggers(1, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
-        %         SendTrigger(Trigger, P.TriggerDuration)
-        % end
+        if P.isEEG
+                Trigger = P.UseTriggers(1, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
+                SendTrigger(Trigger, P.TriggerDuration)
+        end
     
         % Info.T_fin(itrial).img_dur = Info.T_fin(itrial).tImageOn + P.ImgDur;
     
@@ -233,7 +233,7 @@ Pos = [(P.myWidth-imageSize(2))/2 (P.myHeight-imageSize(1))/2 (P.myWidth+imageSi
 
         % Send trigger
         if P.isEEG
-                Trigger = P.UseTriggers(1, Info.T_fin(itrial).cond, Info.T_fin(itrial).category);
+                Trigger = P.UseTriggers(1, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
                 SendTrigger(Trigger, P.TriggerDuration)
         end
     
