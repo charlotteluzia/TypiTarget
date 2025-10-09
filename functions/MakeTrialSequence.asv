@@ -318,7 +318,7 @@ T_C.task = strrep(T_C.task, 'oddball', 'memory');
 T_C = table2struct(T_C);
 T_C = T_C.';
 
-T_C = cell2struct(struct2cell(T_C), {'filename', 'category', 'category_idx', 'p_typicality', 'n_block', 'task', 'cond', 'cond_idx', 'block_total'});
+T_C = cell2struct(struct2cell(T_C), {'filename', 'category', 'category_idx', 'p_typicality', 'n_block', 'task', 'cond',  'block_total'});
 TM = [T_C, M];
 
 

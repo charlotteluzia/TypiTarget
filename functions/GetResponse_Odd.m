@@ -46,7 +46,7 @@ while GetSecs < stop
                 Report = 1;
                 reactionTime = rt;
                 if P.isEEG
-                Trigger = P.UseTriggers(2, Info.T_fin(itrial).task, Info.T_fin(itrial).category);
+                Trigger = P.UseTriggers(2, 2, Info.T_fin(itrial).cond_idx, Info.T_fin(itrial).category_idx);
                 SendTrigger(Trigger, P.TriggerDuration)
                 end
                 return;

@@ -8,12 +8,12 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = 'test_02_10_2';
+name = 'test_09_10';
 % choose training for a practice run, choose full to run the full experiment
 flavor = 'full';
 % which version do you want to run? (image presentation time differs in oddball task)
 % version sevenh: 700ms, version fiveh: 500ms 
-version = 'sevenh';
+version = 'fiveh';
 
 %% ---------------------------------------------------------------------
 % Add paths and initialize global variables. and test if logfile exists for this subject.

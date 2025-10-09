@@ -4,7 +4,7 @@ function [P] = Parameters(P)
 % If yes, set desired display parameters.
 % If not, use current display settings.
 % ------------------------------------------------------------------------
-P.isEEG          = 0; % if==1: send EEG triggers
+P.isEEG          = 1; % if==1: send EEG triggers
 P.doSkipSyncTest = 1; % if==1: no synctest and normal priority (this is for testing) 
 
 
