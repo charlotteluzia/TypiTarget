@@ -12,9 +12,9 @@ for i = 1:n_stim
 
     T(itrial).filename        = image_table.info(this_img).stimulus;
     T(itrial).category        = image_table.info(this_img).category;
-    if contains(T(itrial).category, 'target')
+    if strcmpi(T(itrial).category, 'target')
         T(itrial).category_idx = 1;
-    elseif contains(T(itrial).category, 'nontarget')
+    elseif strcmpi(T(itrial).category, 'nontarget')
         T(itrial).category_idx = 2;
     elseif contains(T(itrial).category, 'bedrooms')
         T(itrial).category_idx = 3;

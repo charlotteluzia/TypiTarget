@@ -14,6 +14,7 @@ Report = 0;
 reactionTime = NaN;
 isQuit = 0;
 
+% deviceIndex = 6;
 KbQueueCreate();
 KbQueueStart();
 
@@ -30,7 +31,8 @@ Screen('Flip', window);
 
 while GetSecs < stop
 
-    [pressed, firstPress] = KbQueueCheck;
+    [pressed, firstPress] = KbQueueCheck();
+
     
     if pressed
         keyIdx = find(firstPress);
@@ -49,6 +51,7 @@ while GetSecs < stop
                 Trigger = P.UseTriggers(2, 2, Info.T_fin(itrial).cond_idx, Info.T_fin(itrial).category_idx);
                 SendTrigger(Trigger, P.TriggerDuration)
                 end
+                disp(keyName);
                 return;
             elseif strcmpi(keyName, 'ESCAPE')
                 Report = 99;

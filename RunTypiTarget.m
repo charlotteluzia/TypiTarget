@@ -8,7 +8,7 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = 'test_09_10';
+name = 'test_16_10';
 % choose training for a practice run, choose full to run the full experiment
 flavor = 'full';
 % which version do you want to run? (image presentation time differs in oddball task)
@@ -89,8 +89,11 @@ else
     switch flavor
         case 'training'
             [Info.T_fin] = MakeTrainingSequence(P);
+            Info.P.ResponseMapping = randperm(2);
         case 'full'
             [Info.T_fin] = MakeTrialSequence(P);
+            Info.P.ResponseMapping = randperm(2);
+ 
     end
 end
 
@@ -117,14 +120,17 @@ global DefaultScreen
 DefaultScreen = Screen('OpenOffscreenWindow', window, P.BgColor);
 my_optimal_fixationpoint(DefaultScreen, P.CenterX, P.CenterY, 0.6, [100 100 100], [192 192 192], P.pixperdeg);
 
+% working version for pilot first line of variables
 global MemScreen
 MemScreen = Screen('OpenOffscreenWindow', window, P.BgColor);
-tw = RectWidth(Screen('TextBounds',  window, P.mem_responseText));
-th = RectHeight(Screen('TextBounds', window, P.mem_responseText));
-Screen(MemScreen, 'DrawText', P.mem_responseOld, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
-% Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueOld}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
-Screen(MemScreen, 'DrawText', P.mem_responseNew, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
-% Screen(DefaultMemScreen, 'DrawText', P.cue_text{Info.P.mem_cueNew}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset ,P.mem_cueColor);
+% tw = RectWidth(Screen('TextBounds',  window, P.mem_responseText));
+tw = RectWidth(Screen('TextBounds',  window, P.cueMem_Text{Info.P.ResponseMapping(1)}));
+% th = RectHeight(Screen('TextBounds', window, P.mem_responseText));
+th = RectWidth(Screen('TextBounds',  window, P.cueMem_Text{Info.P.ResponseMapping(1)}));
+% Screen(MemScreen, 'DrawText', P.mem_responseOld, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+Screen(MemScreen, 'DrawText', P.cueMem_Text{Info.P.ResponseMapping(1)}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+% Screen(MemScreen, 'DrawText', P.mem_responseNew, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
+Screen(MemScreen, 'DrawText', P.cueMem_Text{Info.P.ResponseMapping(2)}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset ,P.mem_cueColor);
 my_optimal_fixationpoint(DefaultScreen, P.CenterX, P.CenterY, 0.6, [100 100 100], [192 192 192], P.pixperdeg);
 
 %% --------------------------------------------------------------------

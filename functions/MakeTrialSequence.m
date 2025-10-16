@@ -6,7 +6,8 @@ function [T_fin] = MakeTrialSequence(P)
 % selection 
 % images for standard categories in ODDBALL TASK
  
-stim_140            = readtable(P.stim_140);
+% stim_140            = readtable(P.stim_140);
+stim_140            = readtable(P.stim_extended);
 match               = wildcardPattern + '/';
 stim_140.stimulus   = erase(stim_140.stimulus, match);
 stim_targets_idx    = readtable(P.stim_target);
@@ -45,8 +46,8 @@ block_cat_total = 1;
 
 for icat = 1:length(P.scene_categories)
 
-    idx_typ   = find([stim_select(icat).info.p_typicality] >= typicality_median(icat)); % >
-    idx_untyp = find([stim_select(icat).info.p_typicality] < typicality_median(icat)); % <=
+    idx_typ   = find([stim_select(icat).info.p_typicality] >= 5.5);%typicality_median(icat)); % >
+    idx_untyp = find([stim_select(icat).info.p_typicality] < 5.5);%typicality_median(icat)); % <=
 
     idx_typ   = idx_typ(randperm(length(idx_typ)));
     idx_untyp = idx_untyp(randperm(length(idx_untyp)));
@@ -249,10 +250,10 @@ end
 % images for standard categories in MEMORY TASK
 % if n_trials >= 80 we need more typical images
  
-stim_mem            = readtable(P.stim_mem);
-
-match               = wildcardPattern + '/';
-stim_mem.stimulus   = erase(stim_mem.stimulus, match);
+% stim_mem            = readtable(P.stim_mem);
+% 
+% match               = wildcardPattern + '/';
+% stim_mem.stimulus   = erase(stim_mem.stimulus, match);
 
 % stim_targets_idx    = readtable(P.stim_target);
 % stim_nontargets_idx = readtable(P.stim_nontarget);
@@ -263,20 +264,48 @@ stim_mem.stimulus   = erase(stim_mem.stimulus, match);
 
 %%
 % get info for room categories for standard stimuli for memory task
-stim_mem_available = struct([]);
-for imem = 1:length(P.scene_categories)
-    mem_name = P.scene_categories{imem};
-    mem_idx  = strcmp(stim_mem.category, mem_name);
-    mem_tab  = stim_mem(mem_idx,:);
-    mem_struct = table2struct(mem_tab);
-    stim_mem_available(imem).info = mem_struct;
+% stim_mem_available = struct([]);
+% for imem = 1:length(P.scene_categories)
+%     mem_name = P.scene_categories{imem};
+%     mem_idx  = strcmp(stim_mem.category, mem_name);
+%     mem_tab  = stim_mem(mem_idx,:);
+%     mem_struct = table2struct(mem_tab);
+%     stim_mem_available(imem).info = mem_struct;
 
     % typicality_median(imem) = median([stim_select(imem).info.p_typicality]);
-end
+% end
 
 %%
-% get new images/foils for the memory task
+% get new images/foils for the memory task TypiTarget pilot
 
+% M = struct();
+% 
+% itrial = 0;
+% block_mem_total = 1;
+% 
+% for imem = 1:length(P.scene_categories)
+% 
+% 
+%     idx_typ   = find([stim_mem_available(imem).info.p_typicality] >= typicality_median(imem)); %>=
+%     idx_untyp = find([stim_available(imem).info.p_typicality] < typicality_median(imem)); %<
+% 
+% 
+% 
+%     for i_mem_block = 1:P.nblocks_per_category
+% 
+%         % Select typical images.
+%         [itrial, M, idx_typ, block_mem_total]   = get_images_mem(itrial, M, stim_mem_available(imem), idx_typ, i_mem_block, block_mem_total, P.n_typ);
+% 
+%         % Select untypical images.
+%         [itrial, M, idx_untyp, block_mem_total] = get_images_mem(itrial, M, stim_available(imem), idx_untyp, i_mem_block, block_mem_total, P.n_untyp);
+% 
+%         block_mem_total = block_mem_total + 1;
+% 
+%     end
+% end
+
+%%
+% get new images/foils for the memory task TypiTarget EEG
 M = struct();
 
 itrial = 0;
@@ -285,15 +314,15 @@ block_mem_total = 1;
 for imem = 1:length(P.scene_categories)
 
     
-    idx_typ   = find([stim_mem_available(imem).info.p_typicality] >= typicality_median(imem)); %>=
-    idx_untyp = find([stim_available(imem).info.p_typicality] < typicality_median(imem)); %<
+    idx_typ   = find([stim_available(imem).info.p_typicality] >= 5.5); % typicality_median(imem)); %>=
+    idx_untyp = find([stim_available(imem).info.p_typicality] < 5.5); %typicality_median(imem)); %<
 
 
 
     for i_mem_block = 1:P.nblocks_per_category
 
         % Select typical images.
-        [itrial, M, idx_typ, block_mem_total]   = get_images_mem(itrial, M, stim_mem_available(imem), idx_typ, i_mem_block, block_mem_total, P.n_typ);
+        [itrial, M, idx_typ, block_mem_total]   = get_images_mem(itrial, M, stim_available(imem), idx_typ, i_mem_block, block_mem_total, P.n_typ);
 
         % Select untypical images.
         [itrial, M, idx_untyp, block_mem_total] = get_images_mem(itrial, M, stim_available(imem), idx_untyp, i_mem_block, block_mem_total, P.n_untyp);

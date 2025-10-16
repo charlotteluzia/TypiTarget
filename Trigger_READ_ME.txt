@@ -3,10 +3,10 @@ TRIGGER
 1 onset target oddball old
 9 onset nontarget oddball old
 17 onset bedroom oddball old
-25 onset kitchen oddbal old
+25 onset kitchen oddball old
 33 onset living room oddball old
 
-3 response target oddball old
+2 response target oddball old
 
 19 onset bedroom memory old
 23 onset bedroom memory old

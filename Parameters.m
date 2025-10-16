@@ -67,10 +67,11 @@ P.mem_cueColor = [98 101 103]; %[180 180 180];
 % Present instructional cues in the lower corners.
 P.cueXoffset = 300;
 P.cueYoffset = 100;
-P.mem_cueCertainOld = ['sicher alt'];
-P.mem_cueOld        = ['eher alt'];
-P.mem_cueNew        = ['eher neu'];
-P.mem_cueCertainNew = ['sicher neu'];
+P.cueMem_Text = {'[sicher alt]', '[sicher neu]'};
+%P.mem_cueCertainOld = ['sicher alt'];
+%P.mem_cueOld        = ['eher alt'];
+%P.mem_cueNew        = ['eher neu'];
+%P.mem_cueCertainNew = ['sicher neu'];
 
 
 %% -----------------------------------------------------------------------
@@ -85,7 +86,11 @@ P.CertainOldKey = KbName('d');
 P.OldKey = KbName('f');
 P.NewKey = KbName('j');
 P.CertainNewKey = KbName('k');
-P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
+% P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
+P.ResponseKeys = {KbName('d'); KbName('k')};
+
+P.LeftKey = KbName('d');
+P.RightKey = KbName('k');
 
 
 %% -----------------------------------------------------------------------
@@ -104,20 +109,16 @@ P.mem_responseText = ['sicher alt', 'eher alt', 'eher neu', 'sicher neu'];
 %% -----------------------------------------------------------------------
 % Images
 %  -----------------------------------------------------------------------
-P.prop_typ       = 0.4;  % proportion of typical images
-P.prop_untyp     = 0.2;  % proportion of untypical images
+% P.prop_typ       = 0.4;  % proportion of typical images
+% P.prop_untyp     = 0.2;  % proportion of untypical images
+% P.prop_target    = 0.2;  % proportion of target images
+% P.prop_nontarget = 0.2;  % proportion of nontarget images
+
+P.prop_typ       = 0.42;  % proportion of typical images
+P.prop_untyp     = 0.17;  % proportion of untypical images
 P.prop_target    = 0.2;  % proportion of target images
 P.prop_nontarget = 0.2;  % proportion of nontarget images
 
-% P.prop_typ       = 0.5;  % proportion of typical images
-% P.prop_untyp     = 0.2;  % proportion of untypical images
-% P.prop_target    = 0.15;  % proportion of target images
-% P.prop_nontarget = 0.15;  % proportion of nontarget images
-
-% P.prop_typ       = 0.6;  % proportion of typical images
-% P.prop_untyp     = 0.2;  % proportion of untypical images
-% P.prop_target    = 0.1;  % proportion of target images
-% P.prop_nontarget = 0.1;  % proportion of nontarget images
 
 switch P.Flavor
     case 'training'
@@ -140,12 +141,14 @@ switch P.Flavor
     otherwise
         P.scene_categories = {'kitchens', 'bedrooms', 'living_rooms'};
         P.nblocks_per_category = 2;
-        P.n_trials_per_block = 20;
+        P.n_trials_per_block = 85;
 
-        P.stim_140       = 'stimuli_info_140.xlsx';
+        % P.stim_140       = 'stimuli_info_140.xlsx';
         P.stim_target    = 'stimuli_info_target.xlsx';
         P.stim_nontarget = 'stimuli_info_nontarget.xlsx';
         P.stim_mem       = 'stimuli_info_add_TypT.xlsx';
+
+        P.stim_extended  = 'stimuli_info_TypT_pre.xlsx';
 
         P.n_typ       = ceil(P.prop_typ       * P.n_trials_per_block);
         P.n_untyp     = ceil(P.prop_untyp     * P.n_trials_per_block);
