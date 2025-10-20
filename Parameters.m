@@ -148,7 +148,8 @@ switch P.Flavor
         P.stim_nontarget = 'stimuli_info_nontarget.xlsx';
         P.stim_mem       = 'stimuli_info_add_TypT.xlsx';
 
-        P.stim_extended  = 'stimuli_info_TypT_pre.xlsx';
+        P.stim_extended  = 'stimuli_info_final_TypiT.xlsx';
+        % P.stim_extended  = 'stimuli_info_TypT_pre.xlsx';
 
         P.n_typ       = ceil(P.prop_typ       * P.n_trials_per_block);
         P.n_untyp     = ceil(P.prop_untyp     * P.n_trials_per_block);
