@@ -182,15 +182,24 @@ P.maxISI  = 2.000;
 %  -----------------------------------------------------------------------
 % Trigger parameters
 % triggers 1-255
-% we want to have different information in our triggers
+% we want to have different information in our triggers, combination of
+% task and condition plus typicality information and event type
 % first digit: type of event (1: image onset, 2: response)
 % second digit: task (oddball/memory)
-% third digit: scene category (target, nontarget, bedroom, kitchen, living
+% third digit: condition (old/new)
+% fourth digit: typicality - typical, untypical
+% fifth digit: scene category (target, nontarget, bedroom, kitchen, living
 % room)
-% P.unavailTriggers = [20 30];
-% P.availTriggers = find(ismember(1:255), P.unavailTriggers);
-n_triggers = 2 * 2 * 2 * (length(P.scene_categories) + 2);
-P.UseTriggers = reshape((1:n_triggers), [2 2 2 (length(P.scene_categories) + 2)]);
+
+% n_triggers = 2 * 2 * 2 * (length(P.scene_categories) + 2);
+n_triggers = 2 * 2 * 2 * 2 * (length(P.scene_categories) + 2);
+% P.UseTriggers = reshape((1:n_triggers), [2 2 2 (length(P.scene_categories) + 2)]);
+% P.UseTriggers = reshape((1:n_triggers), [2 2 2 2 (length(P.scene_categories) + 2)]);
+
+% scene cat, typ idx, cond idx, task, event
+% P.UseTriggers = reshape((1:n_triggers), [(length(P.scene_categories) + 2) 2 2 2 2 ]);
+% typ idx, scene cat, cond idx, task, event
+P.UseTriggers = reshape((1:n_triggers), [2 (length(P.scene_categories) + 2) 2 2 2 ]);
 
 P.TriggerDuration = 0.005;
 P.TriggerStartRecording = 120;

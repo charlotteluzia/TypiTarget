@@ -21,6 +21,11 @@ for i = 1:n_stim
         M(itrial).category_idx = 5;
     end
     M(itrial).p_typicality = image_table.info(this_img).p_typicality;
+    if M(itrial).p_typicality <= 5
+        M(itrial).typicality_idx = 1;
+    elseif M(itrial).p_typicality > 5
+        M(itrial).typicality_idx = 2;
+    end
     M(itrial).n_block      = i_mem_block;
     M(itrial).task         = 'memory';
     M(itrial).cond         = 'new';

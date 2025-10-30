@@ -24,6 +24,11 @@ for i = 1:n_stim
         T(itrial).category_idx = 5;
     end
     T(itrial).p_typicality    = image_table.info(this_img).p_typicality;
+    if T(itrial).p_typicality <= 5
+        T(itrial).typicality_idx = 1;
+    elseif T(itrial).p_typicality > 5
+        T(itrial).typicality_idx = 2;
+    end
     T(itrial).n_block         = i_cat_block;
     T(itrial).task            = 'oddball';
     T(itrial).cond            = 'old';
