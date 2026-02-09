@@ -31,7 +31,12 @@ else
             P.myWidth       = 2560;
             P.myHeight      = 1440;
             P.myRate        = 60;
-
+        case 'ApfelbaumLaptop'
+            P.ImagePath     = 'E:\Buschlab_Repo\TypiTarget\stimuli';
+            P.PresentScreen = 0;
+            P.myWidth       = 1920;
+            P.myHeight      = 1200;
+            P.myRate        = 60;
     end
        
 end
@@ -67,7 +72,7 @@ P.mem_cueColor = [98 101 103]; %[180 180 180];
 % Present instructional cues in the lower corners.
 P.cueXoffset = 300;
 P.cueYoffset = 100;
-P.cueMem_Text = {'[sicher alt]', '[sicher neu]'};
+
 %P.mem_cueCertainOld = ['sicher alt'];
 %P.mem_cueOld        = ['eher alt'];
 %P.mem_cueNew        = ['eher neu'];
@@ -82,15 +87,37 @@ P.Quitkey = KbName('ESCAPE');
 
 P.YesKey  = KbName('space');
 
-P.CertainOldKey = KbName('d');
-P.OldKey = KbName('f');
-P.NewKey = KbName('j');
-P.CertainNewKey = KbName('k');
-% P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
-P.ResponseKeys = {KbName('d'); KbName('k')};
+if randi([0, 1])
+    %disp('OldNew')
+    P.ResponseMappping = 'OldNew';
+    P.CertainOldKey = KbName('d');
+    P.OldKey = KbName('f');
+    P.NewKey = KbName('j');
+    P.CertainNewKey = KbName('k');
+    % P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
+    P.ResponseKeys = {KbName('d'); KbName('k')};
 
-P.LeftKey = KbName('d');
-P.RightKey = KbName('k');
+    P.LeftKey = KbName('d');
+    P.RightKey = KbName('k');
+
+    P.cueMem_Text = {'[sicher alt]', '[sicher neu]'};
+
+else
+    %disp('NewOld')
+    P.ResponseMapping = 'NewOld';
+    P.CertainOldKey = KbName('k');
+    P.OldKey = KbName('j');
+    P.NewKey = KbName('f');
+    P.CertainNewKey = KbName('d');
+    % P.ResponseKeys = {KbName('d'); KbName('f'); KbName('j'); KbName('k')};
+    P.ResponseKeys = {KbName('k'); KbName('d')};
+
+    P.LeftKey = KbName('k');
+    P.RightKey = KbName('d');
+
+    P.cueMem_Text = {'[sicher neu]','[sicher alt]'};
+end
+
 
 
 %% -----------------------------------------------------------------------
@@ -98,9 +125,15 @@ P.RightKey = KbName('k');
 %  -----------------------------------------------------------------------
 
 P.mem_cues = {'[d]', '[f]', '[j]', '[k]'};
-P.mem_responseOld = ['    sicher alt        ', '       eher alt         '];
-P.mem_responseNew = ['     eher neu         ', '       sicher neu      '];
-P.mem_responseText = ['sicher alt', 'eher alt', 'eher neu', 'sicher neu'];
+if isequal(P.ResponseMapping, 'OldNew')
+    P.mem_responseOld = ['    sicher alt        ', '       eher alt         '];
+    P.mem_responseNew = ['     eher neu         ', '       sicher neu      '];
+    P.mem_responseText = ['sicher alt', 'eher alt', 'eher neu', 'sicher neu'];
+else
+    P.mem_responseNew = ['    sicher neu        ', '       eher neu         '];
+    P.mem_responseOld = ['     eher alt         ', '       sicher alt      '];
+    P.mem_responseText = ['sicher neu', 'eher neu', 'eher alt', 'sicher alt'];
+end
 % P.mem_responseText = {'[certainly old]', '[rather old]', '[rather new]', '[certainly new]'};
 
 %P.mem_location
