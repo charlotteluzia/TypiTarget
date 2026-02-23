@@ -8,7 +8,7 @@ clear;
 close all;
 
 % participant number, e.g. 01
-name = 'test_30_10';
+name = 'test_17_02';
 % choose training for a practice run, choose full to run the full experiment
 flavor = 'full';
 % which version do you want to run? (image presentation time differs in oddball task)
@@ -124,14 +124,23 @@ my_optimal_fixationpoint(DefaultScreen, P.CenterX, P.CenterY, 0.6, [100 100 100]
 global MemScreen
 MemScreen = Screen('OpenOffscreenWindow', window, P.BgColor);
 % tw = RectWidth(Screen('TextBounds',  window, P.mem_responseText));
-tw = RectWidth(Screen('TextBounds',  window, P.cueMem_Text{1}));
 % th = RectHeight(Screen('TextBounds', window, P.mem_responseText));
-th = RectWidth(Screen('TextBounds',  window, P.cueMem_Text{1}));
+tw1 = RectWidth(Screen('TextBounds',  window, P.cueMem_Text{1}));
+tw2 = RectWidth(Screen('TextBounds',  window, P.cueMem_Text{2}));
+tw3 = RectWidth(Screen('TextBounds',  window, P.cueMem_Text{3}));
+tw4 = RectWidth(Screen('TextBounds',  window, P.cueMem_Text{4}));
+tws = RectWidth(Screen('TextBounds',  window, P.cueMem_Letters{1}));
 % Screen(MemScreen, 'DrawText', P.mem_responseOld, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
-Screen(MemScreen, 'DrawText', P.cueMem_Text{1}, P.CenterX-P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
 % Screen(MemScreen, 'DrawText', P.mem_responseNew, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset, P.mem_cueColor);
-Screen(MemScreen, 'DrawText', P.cueMem_Text{2}, P.CenterX+P.cueXoffset-0.5*tw, P.myHeight-P.cueYoffset ,P.mem_cueColor);
-my_optimal_fixationpoint(DefaultScreen, P.CenterX, P.CenterY, 0.6, [100 100 100], [192 192 192], P.pixperdeg);
+Screen(MemScreen, 'DrawText', P.cueMem_Letters{1}, P.CenterX-P.cueXoffset-0.5*tws, P.myHeight-1.4*P.cueYoffset, P.mem_cueColor);
+Screen(MemScreen, 'DrawText', P.cueMem_Letters{2}, P.CenterX-0.5*P.cueXoffset-0.4*tws, P.myHeight-1.4*P.cueYoffset, P.mem_cueColor);
+Screen(MemScreen, 'DrawText', P.cueMem_Letters{3}, P.CenterX+0.5*P.cueXoffset-0.4*tws, P.myHeight-1.4*P.cueYoffset ,P.mem_cueColor);
+Screen(MemScreen, 'DrawText', P.cueMem_Letters{4}, P.CenterX+P.cueXoffset-0.5*tws, P.myHeight-1.4*P.cueYoffset ,P.mem_cueColor);
+Screen(MemScreen, 'DrawText', P.cueMem_Text{1}, P.CenterX-P.cueXoffset-0.5*tw1, P.myHeight-P.cueYoffset, P.mem_cueColor);
+Screen(MemScreen, 'DrawText', P.cueMem_Text{2}, P.CenterX-0.5*P.cueXoffset-0.5*tw2, P.myHeight-P.cueYoffset, P.mem_cueColor);
+Screen(MemScreen, 'DrawText', P.cueMem_Text{3}, P.CenterX+0.5*P.cueXoffset-0.5*tw3, P.myHeight-P.cueYoffset ,P.mem_cueColor);
+Screen(MemScreen, 'DrawText', P.cueMem_Text{4}, P.CenterX+P.cueXoffset-0.5*tw4, P.myHeight-P.cueYoffset ,P.mem_cueColor);
+my_optimal_fixationpoint(MemScreen, P.CenterX, P.CenterY, 0.6, [100 100 100], [192 192 192], P.pixperdeg);
 
 %% --------------------------------------------------------------------
 % Run across trials.
@@ -214,3 +223,9 @@ CloseAndCleanup(P)
 %----------------------------------------------------------------------
 filename = ['TypT_', flavor, '_', name, '.csv'];
 writetable(struct2table(Info.T_fin), filename);
+
+
+%% Test Things
+%Screen(MemScreen, 'DrawText', P.cueMem_Text{1}, 1100, P.CenterY, P.mem_cueColor);
+Screen('DrawTexture', window, MemScreen);
+[tISIon] = Screen('Flip', window);
