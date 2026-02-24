@@ -223,9 +223,3 @@ CloseAndCleanup(P)
 %----------------------------------------------------------------------
 filename = ['TypT_', flavor, '_', name, '.csv'];
 writetable(struct2table(Info.T_fin), filename);
-
-
-%% Test Things
-%Screen(MemScreen, 'DrawText', P.cueMem_Text{1}, 1100, P.CenterY, P.mem_cueColor);
-Screen('DrawTexture', window, MemScreen);
-[tISIon] = Screen('Flip', window);
