@@ -1,7 +1,12 @@
 TRIGGER
 ODDBALL^1 event, task, condition, typicality, scene category
+Current version:
 ODDBALL/MEMORY^2 typicality, scene category, condition, task, event
 
+Experiment start 120
+Experiment end 130
+Pause start 140 (not yet in code)
+Pause end 150 (not yet in code)
 
 ODDBALL^2
 1 onset target oddball old
@@ -14,6 +19,16 @@ ODDBALL^2
 10 onset living room oddball old typical
 
 41 response target oddball old
+
+Oddball response space
+43 bathroom
+45 untypical bedroom
+46 typical bedroom
+47 untypical kitchen
+48 typical kitchen
+49 untypical living room
+50 typical living room
+
 
 MEMORY^2
 25 onset bedroom memory old untypical

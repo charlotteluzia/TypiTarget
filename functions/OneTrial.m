@@ -13,6 +13,10 @@ switch P.Flavor
     case 'full'
         if(mod(itrial, P.BreakAfternTrials) == 1 || itrial == 1)
             PresentPause(window, P, Info, itrial)
+            % Trigger start
+            if P.isEEG
+                SendTrigger(P.TriggerStartRecording, P.TriggerDuration)
+            end
         end
 end
 

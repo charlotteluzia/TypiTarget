@@ -204,6 +204,8 @@ P.UseTriggers = reshape((1:n_triggers), [2 (length(P.scene_categories) + 2) 2 2 
 P.TriggerDuration = 0.005;
 P.TriggerStartRecording = 120;
 P.TriggerStopRecording = 130;
+P.TriggerPauseStart = 140;
+P.TriggerPauseEnd = 150;
 
 
 

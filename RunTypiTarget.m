@@ -208,7 +208,10 @@ end
 %----------------------------------------------------------------------
 WaitSecs(3);
 CloseAndCleanup(P)
-
+% Trigger start
+if P.isEEG
+    SendTrigger(P.TriggerStopRecording, P.TriggerDuration)
+end
 %----------------------------------------------------------------------
 % Write mat file to csv file
 %----------------------------------------------------------------------
